@@ -6,21 +6,24 @@
     border-radius: 8px
     padding: 20px 20px 40px 20px
     background: rgba(0,0,0, 0.2)
+    animation: form-squeeze 1.5s forwards ease, fade-out 0.1s 3s forwards
 
     form
         .input-group
             display: flex
             justify-content: space-between
-            width: 80%
+            width: 90%
             margin: 30px auto 40px
 
             label
+                position: relative
+                top: -4px
                 color: #ffffff
                 font-size: 2.5rem
 
             input
                 height: 40px
-                width: 50%
+                width: 60%
                 padding: 1px 0 0 40px
                 font-size: 1.5rem
                 color: #444
@@ -40,7 +43,7 @@
             .price-block
                 display: inline-block
                 postion: relative
-                width: 50%
+                width: 60%
                 text-align: right
 
                 select
@@ -69,7 +72,7 @@
             display: block
             cursor: pointer
             margin: 0 auto
-            width: 80%
+            width: 90%
             border-radius: 10px
             border: 0
             outline: 0
@@ -93,3 +96,16 @@
             &:focus
                 background: linear-gradient(to bottom, lighten(#ffbd51,5%) 0%, #ffe87e 100%)
 
+
+.mystery-bag
+    // display: none
+    position: absolute
+    opacity: 0
+    top: 0
+    left: 28%
+    z-index: 1000
+    width: 40vw
+    animation: bag-fade-in 2s 1s forwards ease-out, bag-shake 3s 3s forwards
+
+    //opacity: 1
+    //animation: bag-shake 3s forwards ease-out
