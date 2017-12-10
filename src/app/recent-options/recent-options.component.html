@@ -1,0 +1,18 @@
+<div class='recent-options'>
+  <div class='title'>The most recent "better" options</div>
+  <div class='table'>
+
+    <div class='table__headers row'>
+      <div class='col-sm-6'>Item name</div>
+      <div class='centered col-sm-3'>amount</div>
+      <div class='centered col-sm-3'>for</div>
+    </div>
+    
+    <div class='table__item row' *ngFor = 'let option of recentOptions'>
+        <div class='col-sm-6'>{{ option.title }}</div>
+        <div class='centered col-sm-3'>{{ option.amount }}</div>
+        <div class='centered col-sm-3'>{{ option.price }}$</div>
+    </div>
+
+  </div>
+</div>

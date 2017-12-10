@@ -11,14 +11,17 @@ body
     font-family: 'Arimo', 'Roboto', 'Arial', sans-serif
     font-size: 12px
     background: #00bf92
-    background: -moz-linear-gradient(30deg, #00bf92 0%, #b8a992 100%)
-    background: -webkit-linear-gradient(30deg, #00bf92 0%,#b8a992 100%)
-    background: linear-gradient(30deg, #00bf92 0%,#b8a992 100%)
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00bf92', endColorstr='#b8a992',GradientType=1 )
+    background: -moz-linear-gradient(45deg, #00bf92 0%, #00ce92 100%)
+    background: -webkit-linear-gradient(45deg, #00bf92 0%,#00ce92 100%)
+    background: linear-gradient(45deg, #00bf92 0%,#00ce92 100%)
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00bf92', endColorstr='#00ce92',GradientType=1 )
     background-repeat: no-repeat
     background-attachment: fixed
-    overflow: hidden
 
+    &.animated
+        overflow: hidden
+        .recent-options
+            animation: fade-out 0.4s forwards
 
 ::-webkit-scrollbar-track
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3)

@@ -1,10 +1,10 @@
-<div class='main-form-container'>
-  <form name='main-form'>
+<div class='main-form-container' [ngClass] = '{animated: animationStarted}'>
+  <form name='main-form' autocomplete="off" >
 
     <!-- item input -->
     <div class='input-group'>
         <label for='item'>I want to buy a</label>
-        <input type='text' name='item' placeholder='Sony Playstation 4'/>
+        <input type='text' name='item' placeholder='Sony Playstation 4' autocomplete="off"/>
     </div>
 
     <!-- price input and currency select -->
@@ -12,7 +12,7 @@
         <label for='item'>it will cost me</label>
 
         <div class='price-block'>
-            <input type='text' name='price' placeholder='100' class='price-input'/>
+            <input type='text' name='price' placeholder='100' class='price-input' autocomplete="off"/>
             <select name='currencies'>
               <option selected='selected'>UAH</option>
               <option>USD</option>
@@ -24,9 +24,9 @@
     </div>
 
     <!-- submit button -->
-    <button class='submit-button' type='submit'>What else can I get for the same price?</button>
+    <button class='submit-button' (click)='onSubmitClick($event)' type='submit'>What else can I get for the same price?</button>
 
   </form>
 </div>
 
-<img class='mystery-bag' src='assets/bag.svg' title='Mystery bag' alt='Mystery bag'/>
+<img class='mystery-bag' #bag src='assets/bag.svg' alt='Mystery bag' [ngClass] = '{animated: animationStarted}'/>

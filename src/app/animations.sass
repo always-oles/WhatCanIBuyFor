@@ -1,41 +1,27 @@
 @keyframes bag-fade-in
-    from
-        opacity: 1
-        transform: translateY(110vh)
-    to
-        opacity: 1
-        transform: translateY(10vh)
+    0%
+        transform: translateY(150vh)
+    50%
+        transform: translateY(0)
+    55%
+        transform: rotate(-4deg) translateY(15vh)
+    65%
+        transform: translateY(0)
+    70%
+        transform: rotate(3deg) translateY(15vh)
+    80%
+        transform: translateY(0)
+    85%
+        transform: rotate(-4deg) translateY(15vh)
 
 @keyframes form-squeeze
     from
-        transform: scaleX(1)
+        transform: scale(1, 1) rotate(0)
     to
-        transform: scaleX(0.01)
+        transform: scale(0.3, 0.3) rotate(-90deg)
 
 @keyframes fade-out
     from
         opacity: 1
     to
         opacity: 0
-
-@keyframes bag-shake
-    0%
-        transform: translateY(10vh)
-    10%
-        transform: rotate(-3deg) translateY(3vh)
-    15%
-        transform: translateY(15vh)
-    30%
-        transform: rotate(3deg) translateY(3vh)
-    35%
-        transform: translateY(15vh)
-    50%
-        transform: rotate(-3deg) translateY(3vh)
-    55%
-        transform: translateY(15vh)
-    70%
-        transform: rotate(3deg) translateY(3vh)
-    75%
-        transform: translateY(20vh)
-    100%
-        transform: translateY(10vh)

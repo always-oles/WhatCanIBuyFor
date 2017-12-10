@@ -1,12 +1,14 @@
 .main-form-container
-    margin: 5% auto
+    margin: 5% auto 0
     min-height: 300px
     width: 50%
     max-width: 800px
     border-radius: 8px
     padding: 20px 20px 40px 20px
     background: rgba(0,0,0, 0.2)
-    animation: form-squeeze 1.5s forwards ease, fade-out 0.1s 3s forwards
+    
+    &.animated
+        animation: form-squeeze 1s forwards ease, fade-out 0.1s 1.5s forwards
 
     form
         .input-group
@@ -89,23 +91,22 @@
             background: linear-gradient(to bottom, #ffe87e 0%,#ffbd51 100%)
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe87e', endColorstr='#ffbd51',GradientType=0 )
 
-            &:hover,
-            &:active
+            &:hover
                 background: linear-gradient(to bottom, lighten(#ffe87e, 6%) 0%, lighten(#ffbd51, 6%) 100%)
-
-            &:focus
+            &:active
                 background: linear-gradient(to bottom, lighten(#ffbd51,5%) 0%, #ffe87e 100%)
 
 
 .mystery-bag
-    // display: none
-    position: absolute
     opacity: 0
-    top: 0
-    left: 28%
+    visibility: hidden
+    position: absolute
+    top: 10%
+    left: 32%
     z-index: 1000
-    width: 40vw
-    animation: bag-fade-in 2s 1s forwards ease-out, bag-shake 3s 3s forwards
+    width: 35vw
 
-    //opacity: 1
-    //animation: bag-shake 3s forwards ease-out
+    &.animated
+        opacity: 1
+        visibility: visible
+        animation: bag-fade-in 3.4s forwards ease-out
