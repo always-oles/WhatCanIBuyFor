@@ -1,4 +1,6 @@
-<div class='main-form-container' [ngClass] = '{animated: animationStarted}'>
+<div class='main-form-container'>
+  <div class='yellow-border'></div>
+
   <form name='main-form' autocomplete="off" >
 
     <!-- item input -->
@@ -9,7 +11,7 @@
 
     <!-- price input and currency select -->
     <div class='input-group'>
-        <label for='item'>it will cost me</label>
+        <label for='item'>It will cost me</label>
 
         <div class='price-block'>
             <input type='text' name='price' placeholder='100' class='price-input' autocomplete="off"/>
@@ -29,4 +31,4 @@
   </form>
 </div>
 
-<img class='mystery-bag' #bag src='assets/bag.svg' alt='Mystery bag' [ngClass] = '{animated: animationStarted}'/>
+<!-- <img class='mystery-bag' #bag src='assets/bag.svg' alt='Mystery bag'/> -->
