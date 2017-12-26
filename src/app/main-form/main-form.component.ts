@@ -7,11 +7,14 @@ import * as mojs from 'mo-js';
   styleUrls: ['./main-form.component.sass']
 })
 export class MainFormComponent {
+  formAnimated: boolean = false;
+  bagAnimated: boolean = false;
+  bagFadeOut: boolean = false;
+
   @ViewChild('bag') bag: ElementRef;
 
   // mystery bag animation helpers
   burst: any = null;
-  animationStarted: boolean = false;
   burstsIntervalHolder: any = null;
   burstsInterval: number = 500;
   burstsTimeout: number = 1700;
@@ -37,7 +40,11 @@ export class MainFormComponent {
 
   onSubmitClick(e) {
     e.preventDefault();
-   this.animationStarted = true;
+
+    this.formAnimated = true;
+    this.bagAnimated = true;
+
+    setTimeout(() => this.bagFadeOut = true, 5000);
 
     // add class to body
     this.renderer.addClass(document.body, 'animated');

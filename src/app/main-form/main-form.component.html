@@ -1,4 +1,4 @@
-<div class='main-form-container'>
+<div class='main-form-container' [ngClass]='{formAnimated: formAnimated}'>
   <div class='yellow-border'></div>
 
   <form name='main-form' autocomplete="off" >
@@ -31,4 +31,4 @@
   </form>
 </div>
 
-<!-- <img class='mystery-bag' #bag src='assets/bag.svg' alt='Mystery bag'/> -->
+<img class='mystery-bag' [ngClass]='{bagAnimated: bagAnimated, bagFadeOut: bagFadeOut}' #bag src='assets/bag.svg' alt='Mystery bag'/>
