@@ -1,0 +1,30 @@
+<div 
+  class='result-form-container' 
+  [@fade] = 'fadeStatus' 
+  (@fade.done) = 'fadeDone($event)'
+  [ngClass] = '{ hidden: !resultFormVisible }'
+  >
+  
+  <div class='title'>
+    So, instead of buying a <span class='product'>Playstation 4</span><br/>
+    You can buy these goods:
+  </div>
+
+  <div class='items-list'>
+    <div class='headers'>
+      <div class='left'>Product name</div>
+      <div class='right'>How many</div>
+    </div>
+
+    <div class='item' *ngFor='let item of demoItems'>
+      <div class='name'>{{ item.name }}</div>
+      <div class='count'>{{ item.count }}</div>
+    </div>
+  </div>
+
+  <div class='buttons'>
+    <img class='repeat' src='/assets/repeat-button.svg' (click) = 'onRepeatClick()' />
+    <img class='share' src='/assets/share-button.svg' />
+    <img class='battle' src='/assets/battle-button.svg' />
+  </div>
+</div>

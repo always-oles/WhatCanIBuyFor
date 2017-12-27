@@ -7,6 +7,8 @@ import * as mojs from 'mo-js';
   styleUrls: ['./main-form.component.sass']
 })
 export class MainFormComponent {
+  mainFormVisible: Boolean = false;
+
   formAnimated: boolean = false;
   bagAnimated: boolean = false;
   bagFadeOut: boolean = false;
