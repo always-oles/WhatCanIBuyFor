@@ -1,6 +1,6 @@
-import { Component, OnInit, EventEmitter, Output, trigger, state, style, transition, animate } from '@angular/core';
+import { Component, OnDestroy, EventEmitter, Output, trigger, state, style, transition, animate } from '@angular/core';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-result-form',
@@ -16,17 +16,17 @@ import { GlobalAnimationStateService } from '../services/global-animation-state.
     ])
   ]
 })
-export class ResultFormComponent {
+export class ResultFormComponent implements OnDestroy {
   @Output()
-  repeatClicked: EventEmitter<String> = new EventEmitter();
+  public repeatClicked: EventEmitter<String> = new EventEmitter();
 
   // animation status
-  fadeStatus: String = 'null';
+  public fadeStatus: String = 'null';
 
   // show/hide flag
-  resultFormVisible: Boolean = true;
+  public resultFormVisible: Boolean = false;
 
-  demoItems: Array<Object> = [
+  public demoItems: Array<Object> = [
     {
       name: 'Сварочный инвертор Titan BIS 240',
       count: Math.floor(Math.random() * 10 + 1)
@@ -53,8 +53,14 @@ export class ResultFormComponent {
     }
   ];
 
+  public subscription: Subscription;
+  public animation: any;
+
   constructor(private globalAnimationState: GlobalAnimationStateService) {
-    console.warn('constructor result form ', globalAnimationState);
+    this.subscription = this.globalAnimationState.getAnimationState().subscribe(animation => {
+      this.animation = animation;
+      console.warn('message', animation);
+    });
   }
 
   // animation done
@@ -73,4 +79,8 @@ export class ResultFormComponent {
     this.fadeStatus = 'down';
   }
 
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
+  }
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { GlobalAnimationStateService } from '../services/global-animation-state.service';
+import { DataService } from '../services/data.service';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as mojs from 'mo-js';
 
 @Component({
@@ -7,7 +10,9 @@ import * as mojs from 'mo-js';
   styleUrls: ['./main-form.component.sass']
 })
 export class MainFormComponent {
-  mainFormVisible: Boolean = false;
+  public mainForm: FormGroup;
+
+  mainFormVisible: Boolean = true;
 
   formAnimated: boolean = false;
   bagAnimated: boolean = false;
@@ -23,8 +28,19 @@ export class MainFormComponent {
   burstsDone: number = 0;
   burstsNeeded: number = 3;
 
-  constructor(private renderer: Renderer2) {
-    // burst dummy object
+  constructor(private renderer: Renderer2,
+              private globalAnimationState: GlobalAnimationStateService,
+              private dataService: DataService,
+              private formBuilder: FormBuilder
+  ) {
+    // init the reactive main form model
+    this.mainForm = this.formBuilder.group({
+      product: ['Test product', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+      price: [ Math.floor(Math.random() * 1000 + 100) , Validators.required],
+      currency: ['UAH']
+    });
+
+    // init dummy object for burst
     this.burst = new mojs.Burst({
       left:     0,
       top:      0,
@@ -42,6 +58,16 @@ export class MainFormComponent {
 
   onSubmitClick(e) {
     e.preventDefault();
+
+    this.dataService.getProducts(this.mainForm.value);
+
+    // reset form
+    this.mainForm.reset({
+      currency: 'UAH'
+    });
+
+    //this.globalAnimationState.setAnimationState('name%of%the%animation');
+    return;
 
     this.formAnimated = true;
     this.bagAnimated = true;

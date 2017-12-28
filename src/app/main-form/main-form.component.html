@@ -1,12 +1,19 @@
 <div class='main-form-container' [ngClass]='{formAnimated: formAnimated, hidden: !mainFormVisible}'>
   <div class='yellow-border'></div>
 
-  <form name='main-form' autocomplete="off" >
+  <form name='main-form' autocomplete="off" [formGroup]='mainForm' novalidate>
 
     <!-- item input -->
     <div class='input-group'>
         <label for='item'>I want to buy a</label>
-        <input type='text' name='item' placeholder='Sony Playstation 4' autocomplete="off"/>
+        <input 
+          type='text' 
+          name='item' 
+          placeholder='Something' 
+          autocomplete='off'  
+          formControlName='product' 
+          [ngClass] = "{invalid: mainForm.controls['product'].dirty && !mainForm.controls['product'].valid }"
+        />
     </div>
 
     <!-- price input and currency select -->
@@ -14,19 +21,19 @@
         <label for='item'>It will cost me</label>
 
         <div class='price-block'>
-            <input type='text' name='price' placeholder='100' class='price-input' autocomplete="off"/>
-            <select name='currencies'>
-              <option selected='selected'>UAH</option>
-              <option>USD</option>
-              <option>EUR</option>
-              <option>RUB</option>
+            <input type='text' name='price' placeholder='100' class='price-input' autocomplete="off" formControlName='price' OnlyNumber maxlength="8"/>
+            <select name='currencies' formControlName='currency'>
+              <option value='UAH' selected='selected'>UAH</option>
+              <option value='USD'>USD</option>
+              <option value='EUR'>EUR</option>
+              <option value='RUB'>RUB</option>
             </select>
         </div>
 
     </div>
 
     <!-- submit button -->
-    <button class='submit-button' (click)='onSubmitClick($event)' type='submit'>What else can I get for the same price?</button>
+    <button class='submit-button' (click)='onSubmitClick($event)' [disabled]='mainForm.invalid' type='submit'>What else can I get for the same price?</button>
 
   </form>
 </div>

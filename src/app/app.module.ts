@@ -6,20 +6,28 @@ import { MainFormComponent } from './main-form/main-form.component';
 import { RecentOptionsComponent } from './recent-options/recent-options.component';
 import { ResultFormComponent } from './result-form/result-form.component';
 import { GlobalAnimationStateService } from './services/global-animation-state.service';
+import { DataService } from './services/data.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { OnlyNumberDirective } from './directives/only-number.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainFormComponent,
     RecentOptionsComponent,
-    ResultFormComponent
+    ResultFormComponent,
+    OnlyNumberDirective
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    GlobalAnimationStateService
+    GlobalAnimationStateService,
+    DataService
   ],
   bootstrap: [
     AppComponent

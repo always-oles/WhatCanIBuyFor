@@ -37,7 +37,9 @@
             font-size: 2rem            
             font-weight: 300
             outline: none
-
+            &.invalid
+                border: 1px solid #f00
+                border-radius: 2px
             &::placeholder
                 color: #B3B3B3
 
@@ -76,21 +78,26 @@
         display: block
         margin: 30px auto
         cursor: pointer
-        box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.2)
-
+        box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.15)
         font-size: 1.6rem
         font-weight: 500
+        height: 70px
+        width: 90%
+        border-radius: 15px
+        border: 0
+        outline: 0
 
         background: #f4cc00
         background: -moz-linear-gradient(top, #f4cc00 0%, #f4b300 100%)
         background: -webkit-linear-gradient(top, #f4cc00 0%,#f4b300 100%)
         background: linear-gradient(to bottom, #f4cc00 0%,#f4b300 100%)
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4cc00', endColorstr='#f4b300',GradientType=0 )
-        height: 70px
-        width: 90%
-        border-radius: 15px
-        border: 0
-        outline: 0
+
+        &[disabled]
+            cursor: not-allowed
+            color: #555
+            &:hover
+                background: linear-gradient(to bottom, #f4cc00 0%,#f4b300 100%)
 
         &:hover
             transition: background 0.2s

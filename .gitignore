@@ -43,3 +43,5 @@ Thumbs.db
 
 scraping/
 backend/
+
+src/app/config/
