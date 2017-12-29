@@ -42,6 +42,8 @@ testem.log
 Thumbs.db
 
 scraping/
-backend/
+
+backend/node_modules
+backend/config.js
 
 src/app/config/
