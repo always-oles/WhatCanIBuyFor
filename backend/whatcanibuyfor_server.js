@@ -7,7 +7,7 @@ const path          = require('path');
 const Product       = require('./models/Product');
 const Config        = require('./config');
 
-// mongoose basic setup, thanks stack overflow
+// mongoose basic setup
 mongoose.Promise = global.Promise;
 mongoose.connect(Config.DB_URL, {
   keepAlive: true,
@@ -29,43 +29,75 @@ app.use((req, res, next) => {
 
 let router = express.Router();
 
-const aggregateAndReturnStats = (response) => {
-  User.aggregate([
-      { $match: { deleted: {$ne: 1 } }},
-      {
-          $group: { 
-              _id: null, 
-              totalBookmarks: { 
-                  $sum: '$stats.bookmarksCount' 
-              },
-              totalPostponed: { 
-                  $sum: '$stats.bookmarksPostponed' 
-              },
-              totalVisited: {
-                  $sum: '$stats.bookmarksVisited'
-              },
-              totalVisitedManually: {
-                  $sum: '$stats.bookmarksVisitedManually'
-              },
-              count: {
-                  $sum: 1
-              }
-          }
-      }
+/**
+ * Frontend currencies to DB format
+ * @param {String} input 
+ */
+const currencyToDBFormat = (input) => {
+  const currencies    = ['UAH', 'USD', 'EUR'];
+  const dbCurrencies  = ['грн', '$', '€'];
+
+  if (currencies.indexOf(input) >= 0) {
+    return dbCurrencies[currencies.indexOf(input)];
+  }
+  return false;
+};
+
+/**
+ * Get random products from DB by price and currency
+ * @param {Object} body includes price and currency 
+ * @param {Object} response to send response
+ */
+const getRandomProducts = (body, response) => {
+  let basicPrice, currency = currencyToDBFormat(body.currency);
+
+  // check price
+  if (body.price) {
+    basicPrice = +body.price;   
+  }
+
+  // check currency
+  if (!currency) {
+    return response.json({
+      type: 'API input data error',
+      body: 'there is no such currency'
+    });
+  }
+
+  // get products
+  Product.aggregate([
+      { $match: { 
+        'currency': currency,
+        'price': { $lt: basicPrice }
+      }},
+      { $sample: { size: 6 }}
   ], (error, result) => {
-      response.json(result[0]);
+
+    // if we got an array - remake it and send as response
+    if (result.length) {
+
+      // maps response to demanded format
+      let items = result.map(item => ({
+          quantity: Math.floor(basicPrice / item.price),  
+          title: item.title,
+          price: item.price,
+          url: item.url,
+          picture: item.picture
+      }));
+
+      response.json(items);
+    } else {
+      // TBA
+    }
+
   });
 };
 
 router.route('/whatElseCanIGet')
   .post((request, response) => {
-    db.products.aggregate([
-      {$match: {category:"Electronic Devices"}}, // filter the results
-      {$sample: {size: 5}} // You want to get 5 docs
-    ]);
-
-    console.log(request.body);
-    response.json('Hello World!');
+    
+    // get products from db
+    getRandomProducts(request.body, response);
   }); 
 
 app.use('/', router);
