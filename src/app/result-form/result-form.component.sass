@@ -10,6 +10,9 @@
     box-shadow: 2px 2px 6px 1px rgba(0,0,0,0.25)
     perspective: 500px
 
+    &.fadeIn
+        animation: resultsFadeIn 1.5s ease-out
+
     &.fadeDown
         animation: fadeDown 1s forwards
 
@@ -30,15 +33,16 @@
 
         .headers
             display: flex
-            .left,
-            .right
+
+            & > div
                 font-weight: 600
                 font-size: 1.7rem
-                padding: 10px 5px                
-            .left
-                width: 80%
+                padding: 10px 5px              
+            .name
+                width: 60%
                 text-align: left
-            .right
+            .price,
+            .count
                 width: 20%
                 text-align: center
 
@@ -55,12 +59,23 @@
             .count
                 padding: 10px 5px
             .name
-                width: 80%
+                width: 60%
                 text-align: left
+
+                .photo
+                    cursor: help                
+                    width: 20px
+                    margin: 0 5px
+
+            .price,
             .count
+                display: flex
+                justify-content: center
+                align-items: center
                 width: 20%
                 text-align: center
                 font-weight: 600
+                
 
     .buttons
         position: relative

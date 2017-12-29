@@ -6,14 +6,11 @@ import { Subject } from 'rxjs/Subject';
 export class GlobalAnimationStateService {
   private subject = new Subject<any>();
 
-  public setAnimationState(state) {
-    this.subject.next({ state: state });
+  public set(state) {
+    this.subject.next(state);
   }
 
-  public getAnimationState(): Observable<any> {
+  public get(): Observable<any> {
     return this.subject.asObservable();
   }
-
-  constructor() { }
-
 }

@@ -2,7 +2,7 @@
   class='result-form-container' 
   [@fade] = 'fadeStatus' 
   (@fade.done) = 'fadeDone($event)'
-  [ngClass] = '{ hidden: !resultFormVisible }'
+  [ngClass] = '{ hidden: !resultFormVisible, fadeIn: fadeIn}'
   >
   
   <div class='title'>
@@ -12,19 +12,21 @@
 
   <div class='items-list'>
     <div class='headers'>
-      <div class='left'>Product name</div>
-      <div class='right'>How many</div>
+      <div class='name'>Product name</div>
+      <div class='price'>Price</div>
+      <div class='count'>How many</div>
     </div>
 
-    <div class='item' *ngFor='let item of demoItems'>
-      <div class='name'>{{ item.name }}</div>
+    <div class='item' *ngFor='let item of items'>
+      <div class='name'> <img class='photo' src='/assets/photo.svg' [TooltipImage]='item.photo'/> {{ item.title }}</div>
+      <div class='price'>{{ item.price }} {{ item.currency }}</div>      
       <div class='count'>{{ item.count }}</div>
     </div>
   </div>
-
+    
   <div class='buttons'>
     <img class='repeat' src='/assets/repeat-button.svg' (click) = 'onRepeatClick()' />
     <img class='share' src='/assets/share-button.svg' />
     <img class='battle' src='/assets/battle-button.svg' />
   </div>
-</div>
+</div> 

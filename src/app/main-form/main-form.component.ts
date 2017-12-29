@@ -3,6 +3,8 @@ import { GlobalAnimationStateService } from '../services/global-animation-state.
 import { DataService } from '../services/data.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as mojs from 'mo-js';
+import { MAIN_FORM_DONE, MAIN_FORM_HIDING } from '../constants';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-main-form',
@@ -10,9 +12,17 @@ import * as mojs from 'mo-js';
   styleUrls: ['./main-form.component.sass']
 })
 export class MainFormComponent {
+  // subscribe for animation changes
+  private animationSubscription: Subscription;
+
+  // our main form object
   public mainForm: FormGroup;
 
-  mainFormVisible: Boolean = true;
+  // show/hide flag
+  public mainFormVisible: Boolean = true;
+
+  // current animation
+  public animation: String;
 
   formAnimated: boolean = false;
   bagAnimated: boolean = false;
@@ -33,6 +43,12 @@ export class MainFormComponent {
               private dataService: DataService,
               private formBuilder: FormBuilder
   ) {
+    // upon global animation state change
+    this.animationSubscription = this.globalAnimationState.get().subscribe(animation => {
+      //console.warn('main form received animation', animation);
+      this.animation = animation;
+    });
+
     // init the reactive main form model
     this.mainForm = this.formBuilder.group({
       product: ['Test product', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
@@ -59,7 +75,15 @@ export class MainFormComponent {
   onSubmitClick(e) {
     e.preventDefault();
 
-    this.dataService.getProducts(this.mainForm.value);
+    this.globalAnimationState.set(MAIN_FORM_HIDING);
+
+    this.dataService.requestProducts(this.mainForm.value);
+
+    this.mainFormVisible = false;
+
+    setTimeout(() => {
+      this.globalAnimationState.set(MAIN_FORM_DONE);
+    }, 500);
 
     // reset form
     this.mainForm.reset({
@@ -67,28 +91,27 @@ export class MainFormComponent {
     });
 
     //this.globalAnimationState.setAnimationState('name%of%the%animation');
-    return;
 
-    this.formAnimated = true;
-    this.bagAnimated = true;
+    // this.formAnimated = true;
+    // this.bagAnimated = true;
 
-    setTimeout(() => this.bagFadeOut = true, 5000);
+    // setTimeout(() => this.bagFadeOut = true, 5000);
 
-    // add class to body
-    this.renderer.addClass(document.body, 'animated');
+    // // add class to body
+    // this.renderer.addClass(document.body, 'animated');
 
-    // start bursting after bag animation
-    setTimeout(() => {
+    // // start bursting after bag animation
+    // setTimeout(() => {
 
-      // invoke first burst immediately
-      this.invokeBurst();
+    //   // invoke first burst immediately
+    //   this.invokeBurst();
 
-      // next bursts by interval
-      this.burstsIntervalHolder = setInterval(() => {
-        this.invokeBurst();
-      }, this.burstsInterval);
+    //   // next bursts by interval
+    //   this.burstsIntervalHolder = setInterval(() => {
+    //     this.invokeBurst();
+    //   }, this.burstsInterval);
 
-    }, this.burstsTimeout);
+    // }, this.burstsTimeout);
   }
 
   /**

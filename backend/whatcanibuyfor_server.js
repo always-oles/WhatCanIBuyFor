@@ -52,10 +52,15 @@ const getRandomProducts = (body, response) => {
   let basicPrice, currency = currencyToDBFormat(body.currency);
 
   // check price
-  if (body.price) {
+  if (body.price && !isNaN(+body.price)) {
     basicPrice = +body.price;   
+  } else {
+    return response.json({
+      type: 'API input data error',
+      body: 'price is not a number'
+    });
   }
-
+  
   // check currency
   if (!currency) {
     return response.json({
@@ -64,9 +69,9 @@ const getRandomProducts = (body, response) => {
     });
   }
 
-  // get products
+  // get random products
   Product.aggregate([
-      { $match: { 
+      { $match: {
         'currency': currency,
         'price': { $lt: basicPrice }
       }},
@@ -78,12 +83,13 @@ const getRandomProducts = (body, response) => {
 
       // maps response to demanded format
       let items = result.map(item => ({
-          quantity: Math.floor(basicPrice / item.price),  
+          count: Math.floor(basicPrice / item.price),  
           title: item.title,
           price: item.price,
+          currency: item.currency,
           url: item.url,
-          picture: item.picture
-      }));
+          photo: item.picture
+      })).sort((a, b) => a.count > b.count);
 
       response.json(items);
     } else {
@@ -95,7 +101,8 @@ const getRandomProducts = (body, response) => {
 
 router.route('/whatElseCanIGet')
   .post((request, response) => {
-    
+    console.log(request.body);
+
     // get products from db
     getRandomProducts(request.body, response);
   }); 

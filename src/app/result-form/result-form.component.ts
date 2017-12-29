@@ -1,6 +1,8 @@
 import { Component, OnDestroy, EventEmitter, Output, trigger, state, style, transition, animate } from '@angular/core';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import { Subscription } from 'rxjs/Subscription';
+import { MAIN_FORM_DONE, MAIN_FORM_HIDING } from '../constants';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-result-form',
@@ -11,8 +13,14 @@ import { Subscription } from 'rxjs/Subscription';
       state('down', style({
         transform: 'translateY(100vh)',
         opacity: 0
-       })),
-       transition('* => *', animate('800ms ease-out'))
+      })),
+
+      state('in', style({
+        transform: 'scale(1) rotate(0)',
+        opacity: 1
+      })),
+
+      transition('* => *', animate('800ms ease-out'))
     ])
   ]
 })
@@ -26,48 +34,42 @@ export class ResultFormComponent implements OnDestroy {
   // show/hide flag
   public resultFormVisible: Boolean = false;
 
-  public demoItems: Array<Object> = [
-    {
-      name: 'Сварочный инвертор Titan BIS 240',
-      count: Math.floor(Math.random() * 10 + 1)
-    }
-    , {
-      name: 'Сварочный инвертор Titan BIS 240',
-      count: Math.floor(Math.random() * 10 + 1)
-    }
-    , {
-      name: 'Сварочный инвертор Titan BIS 240',
-      count: Math.floor(Math.random() * 10 + 1)
-    }
-    , {
-      name: 'Сварочный инвертор Titan BIS 240',
-      count: Math.floor(Math.random() * 10 + 1)
-    }
-    , {
-      name: 'Сварочный инвертор Titan BIS 240',
-      count: Math.floor(Math.random() * 10 + 1)
-    }
-    , {
-      name: 'Сварочный инвертор Titan BIS 240',
-      count: Math.floor(Math.random() * 10 + 1)
-    }
-  ];
+  // subscription to global animation state change
+  private animationSubscription: Subscription;
+  // subscription to products receiving from backend
+  private productsSubscription: Subscription;
 
-  public subscription: Subscription;
-  public animation: any;
+  // result products from backend
+  public items: Array<Object>;
 
-  constructor(private globalAnimationState: GlobalAnimationStateService) {
-    this.subscription = this.globalAnimationState.getAnimationState().subscribe(animation => {
-      this.animation = animation;
-      console.warn('message', animation);
+  public fadeIn: Boolean = false;
+
+  constructor(private dataService: DataService,
+              private globalAnimationState: GlobalAnimationStateService
+  ) {
+
+    // subscribe to global animation state change
+    this.animationSubscription = this.globalAnimationState.get().subscribe(animation => {
+      console.warn('result form received animation change', animation);
+
+      // if it's time to animate results
+      if (animation === MAIN_FORM_DONE) {
+        this.resultFormVisible = true;
+        this.fadeIn = true;
+      }
+    });
+
+    this.productsSubscription = this.dataService.getProducts().subscribe(items => {
+      console.warn('received products change', items);
+      this.items = items;
     });
   }
 
   // animation done
   fadeDone($event) {
-    if ($event.toState === 'down') {
-      this.resultFormVisible = false;
-    }
+    // if ($event.toState === 'down') {
+    //   this.resultFormVisible = false;
+    // }
   }
 
   // on Repeat button click
@@ -81,6 +83,6 @@ export class ResultFormComponent implements OnDestroy {
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
+    this.animationSubscription.unsubscribe();
   }
 }

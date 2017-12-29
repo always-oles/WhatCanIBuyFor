@@ -10,6 +10,7 @@ import { DataService } from './services/data.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OnlyNumberDirective } from './directives/only-number.directive';
 import { HttpClientModule } from '@angular/common/http';
+import { TooltipImageDirective } from './directives/tooltip-image.directive';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     MainFormComponent,
     RecentOptionsComponent,
     ResultFormComponent,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    TooltipImageDirective
   ],
   imports: [
     BrowserModule,
