@@ -83,7 +83,7 @@ export class MainFormComponent {
 
     setTimeout(() => {
       this.globalAnimationState.set(MAIN_FORM_DONE);
-    }, 500);
+    }, 1);
 
     // reset form
     this.mainForm.reset({

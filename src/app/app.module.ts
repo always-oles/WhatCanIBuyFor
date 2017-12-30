@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OnlyNumberDirective } from './directives/only-number.directive';
 import { HttpClientModule } from '@angular/common/http';
 import { TooltipImageDirective } from './directives/tooltip-image.directive';
+import { HidePreviewOnClickDirective } from './directives/hide-preview-on-click.directive';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TooltipImageDirective } from './directives/tooltip-image.directive';
     RecentOptionsComponent,
     ResultFormComponent,
     OnlyNumberDirective,
-    TooltipImageDirective
+    TooltipImageDirective,
+    HidePreviewOnClickDirective
   ],
   imports: [
     BrowserModule,
