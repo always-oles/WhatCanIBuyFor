@@ -1,8 +1,9 @@
-import { Component, OnDestroy, EventEmitter, Output, trigger, state, style, transition, animate } from '@angular/core';
+import { Component, EventEmitter, Output, trigger, state, style, transition, animate } from '@angular/core';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import { Subscription } from 'rxjs/Subscription';
 import { MAIN_FORM_DONE, MAIN_FORM_HIDING } from '../constants';
 import { DataService } from '../services/data.service';
+import AnimatableComponent from '../animatable-component.class';
 
 @Component({
   selector: 'app-result-form',
@@ -24,7 +25,7 @@ import { DataService } from '../services/data.service';
     ])
   ]
 })
-export class ResultFormComponent implements OnDestroy {
+export class ResultFormComponent extends AnimatableComponent {
   @Output()
   public repeatClicked: EventEmitter<String> = new EventEmitter();
 
@@ -33,11 +34,6 @@ export class ResultFormComponent implements OnDestroy {
 
   // show/hide flag
   public resultFormVisible: Boolean = false;
-
-  // subscription to global animation state change
-  private animationSubscription: Subscription;
-  // subscription to products receiving from backend
-  private productsSubscription: Subscription;
 
   // result products from backend
   public items: Array<Object>;
@@ -50,21 +46,23 @@ export class ResultFormComponent implements OnDestroy {
   constructor(private dataService: DataService,
               private globalAnimationState: GlobalAnimationStateService
   ) {
+    super();
+
     // subscribe to last search query
     this.dataService.getLastSearch().subscribe(lastSearch => this.lastSearch = lastSearch);
 
     // subscribe to global animation state change
-    this.animationSubscription = this.globalAnimationState.get().subscribe(animation => {
+    this.globalAnimationState.get().subscribe(animation => {
       console.warn('result form received animation change', animation);
 
       // if it's time to animate results
       if (animation === MAIN_FORM_DONE) {
         this.resultFormVisible = true;
-        this.fadeIn = true;
+        this.playAnimation('fadeIn', 2000);
       }
     });
 
-    this.productsSubscription = this.dataService.getProducts().subscribe(items => {
+    this.dataService.getProducts().subscribe(items => {
       console.warn('received products change', items);
       this.items = items;
     });
@@ -84,10 +82,5 @@ export class ResultFormComponent implements OnDestroy {
 
     // invoke fade down animation
     this.fadeStatus = 'down';
-  }
-
-  ngOnDestroy() {
-    // unsubscribe to ensure no memory leaks
-    this.animationSubscription.unsubscribe();
   }
 }

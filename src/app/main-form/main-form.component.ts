@@ -19,10 +19,10 @@ export class MainFormComponent {
   public mainForm: FormGroup;
 
   // show/hide flag
-  public mainFormVisible: Boolean = true;
+  public mainFormVisible: boolean = true;
 
   // current animation
-  public animation: String;
+  public animation: string;
 
   formAnimated: boolean = false;
   bagAnimated: boolean = false;
@@ -52,7 +52,7 @@ export class MainFormComponent {
     // init the reactive main form model
     this.mainForm = this.formBuilder.group({
       product: ['Что-нибудь такоееее', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
-      price: [ Math.floor(Math.random() * 1000 + 100) , Validators.required],
+      price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])],
       currency: ['UAH']
     });
 
@@ -75,10 +75,12 @@ export class MainFormComponent {
   onSubmitClick(e) {
     e.preventDefault();
 
-    this.globalAnimationState.set(MAIN_FORM_HIDING);
+    //this.globalAnimationState.set(MAIN_FORM_HIDING);
 
+    // request products from backend
     this.dataService.requestProducts(this.mainForm.value);
 
+    // 
     this.mainFormVisible = false;
 
     setTimeout(() => {

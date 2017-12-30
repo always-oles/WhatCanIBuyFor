@@ -21,7 +21,18 @@
     <div class='input-group'>
         <label for='item'>Это стоит</label>
         <div class='price-block'>
-            <input type='text' name='price' placeholder='100' class='price-input' autocomplete="off" formControlName='price' OnlyNumber maxlength="8"/>
+            <input 
+              type='text' 
+              name='price' 
+              placeholder='100' 
+              class='price-input' 
+              autocomplete="off" 
+              formControlName='price' 
+              OnlyNumber 
+              maxlength="8"
+              [ngClass] = "{invalid: mainForm.controls['price'].dirty && !mainForm.controls['price'].valid }"
+              title='Минимальное число - 50'
+            />
             
             <!-- currency select -->
             <select name='currencies' formControlName='currency'>
