@@ -92,3 +92,31 @@
                 transform: translateY(-3px)
             &:active
                 transform: scale(1.05)
+
+.image-preview-container
+    cursor: pointer
+    position: fixed
+    display: flex
+    justify-content: center
+    align-items: center
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: rgba(0,0,0,0.7)
+    z-index: 777
+    opacity: 0
+    visibility: hidden
+    transition: all 0.8s
+
+    .image-preview
+        cursor: pointer        
+        display: inline-block
+        width: auto
+        max-height: 70vh
+        border-radius: 5px
+        border: 2px solid #ddd
+
+    &.fadeIn
+        opacity: 1
+        visibility: visible

@@ -12,6 +12,7 @@ import { OnlyNumberDirective } from './directives/only-number.directive';
 import { HttpClientModule } from '@angular/common/http';
 import { TooltipImageDirective } from './directives/tooltip-image.directive';
 import { HidePreviewOnClickDirective } from './directives/hide-preview-on-click.directive';
+import { TournamentFormComponent } from './tournament-form/tournament-form.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HidePreviewOnClickDirective } from './directives/hide-preview-on-click.
     ResultFormComponent,
     OnlyNumberDirective,
     TooltipImageDirective,
-    HidePreviewOnClickDirective
+    HidePreviewOnClickDirective,
+    TournamentFormComponent
   ],
   imports: [
     BrowserModule,

@@ -25,6 +25,8 @@
     "bootstrap": "^4.0.0-beta.2",
     "core-js": "^2.4.1",
     "howler": "^2.0.5",
+    "jquery": "^3.2.1",
+    "jquery-bracket": "^0.11.0",
     "mo-js": "^0.288.2",
     "postcss": "^6.0.14",
     "postcss-cssnext": "^3.0.2",
