@@ -44,9 +44,14 @@ export class ResultFormComponent implements OnDestroy {
 
   public fadeIn: Boolean = false;
 
+  // last search product name
+  public lastSearch: string = '';
+
   constructor(private dataService: DataService,
               private globalAnimationState: GlobalAnimationStateService
   ) {
+    // subscribe to last search query
+    this.dataService.getLastSearch().subscribe(lastSearch => this.lastSearch = lastSearch);
 
     // subscribe to global animation state change
     this.animationSubscription = this.globalAnimationState.get().subscribe(animation => {

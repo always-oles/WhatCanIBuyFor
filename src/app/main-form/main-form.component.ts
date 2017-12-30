@@ -51,7 +51,7 @@ export class MainFormComponent {
 
     // init the reactive main form model
     this.mainForm = this.formBuilder.group({
-      product: ['Test product', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+      product: ['Что-нибудь такоееее', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
       price: [ Math.floor(Math.random() * 1000 + 100) , Validators.required],
       currency: ['UAH']
     });

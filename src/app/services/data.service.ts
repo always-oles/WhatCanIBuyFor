@@ -6,10 +6,15 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class DataService {
     private products = new Subject<any>();
-
+    private lastSearch = new Subject<any>();
     constructor(private http: HttpClient) {}
 
     public requestProducts(formData) {
+
+        // save search product name
+        this.lastSearch.next(formData.product);
+
+        // get data from backend
         this.http
             .post(API_URL + 'whatElseCanIGet', formData)
             .subscribe(data => {
@@ -20,5 +25,9 @@ export class DataService {
 
     public getProducts(): Observable<any> {
         return this.products.asObservable();
+    }
+
+    public getLastSearch(): Observable<any> {
+        return this.lastSearch;
     }
 }
