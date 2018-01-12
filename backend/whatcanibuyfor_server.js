@@ -75,7 +75,7 @@ const getRandomProducts = (body, response) => {
         'currency': currency,
         'price': { $lt: basicPrice }
       }},
-      { $sample: { size: 6 }}
+      { $sample: { size: 4 }}
   ], (error, result) => {
 
     // if we got an array - remake it and send as response

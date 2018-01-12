@@ -1,15 +1,19 @@
 import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
+import { GlobalAnimationStateService } from '../services/global-animation-state.service';
+import AnimatableComponent from '../animatable-component.class';
+import { TOURNAMENT_IN } from '../constants';
 declare var $: any;
 
 @Component({
-  selector: 'app-tournament-form',
-  templateUrl: './tournament-form.component.html', 
-  styleUrls: ['./tournament-form.component.sass']
+  selector: 'app-tournament',
+  templateUrl: './tournament.component.html', 
+  styleUrls: ['./tournament.component.sass']
 })
-export class TournamentFormComponent implements OnInit {
-  public tournamentFormVisible: boolean = false;
-  private maxChance: number = 10;
+export class TournamentComponent extends AnimatableComponent implements OnInit {
+  public tournamentVisible: boolean = false;
+  public fadeIn: boolean = false;
+  private maxChance: number = 15;
   private items: Array<Object>;
 
   /**
@@ -64,7 +68,7 @@ export class TournamentFormComponent implements OnInit {
    * @return Number - points
    */
   private getPoints(item, cantBe?: number): number {
-    let chance = Math.floor(Math.random() * this.maxChance * ( 1 / item.count ) + 1);
+    let chance = Math.floor(Math.random() * this.maxChance + 1);
 
     // if cantBeEqual is set and equals to current chance
     if (cantBe && chance === cantBe) {
@@ -72,30 +76,51 @@ export class TournamentFormComponent implements OnInit {
       // repeat until we have another chance
       while (chance === cantBe) {
         console.warn('duplicate: ', chance, cantBe);
-        chance = Math.floor(Math.random() * this.maxChance * ( 1 / item.count ) + 1);
+        chance = Math.floor(Math.random() * this.maxChance + 1);
       }
     }
 
     return chance;
   }
 
-  constructor(private el: ElementRef, private dataService: DataService) {}
+  constructor(
+    private el: ElementRef,
+    private dataService: DataService,
+    private globalAnimationState: GlobalAnimationStateService
+  ) { super(); }
 
   ngOnInit() {
     // upon products receive - build a bracket for them
     this.dataService.getProducts().subscribe(items => {
-      console.warn('tournament received products');
       this.items = items;
+      this.buildBracket();
+    });
+
+    // subscribe to global animation state
+    this.globalAnimationState.get().subscribe(animation => {
+      // if it's time to animate results
+      if (animation === TOURNAMENT_IN) {
+
+        // make component visible
+        this.tournamentVisible = true;
+
+        // animate fade in
+        this.playAnimation('fadeIn', 500, () => {
+
+          // scroll to element
+          const offset = $('.brackets-container').get(0).offsetTop + $('.brackets-container').get(0).clientHeight;
+          $('html, body').animate({ scrollTop: offset }, 1500);
+        });
+      }
     });
   }
 
   buildBracket(): void {
-    // generate tournament bracket on demand 
     if (!this.items.length) { return; }
 
     $(this.el.nativeElement).find('.match').bracket({
       init: this.generateChances(this.items),
-      teamWidth: 280,
+      teamWidth: 220,
       matchMargin: 20,
       roundMargin: 40
     });

@@ -1,9 +1,7 @@
 <div 
-  class='result-form-container' 
-  [@fade] = 'fadeStatus' 
-  (@fade.done) = 'fadeDone($event)'
-  [ngClass] = '{ hidden: !resultFormVisible, fadeIn: fadeIn}'
-  >
+  class='results-container' 
+  [ngClass] = '{ hidden: !resultsVisible, fadeIn: fadeIn}'
+>
   
   <div class='title'>
     Итак, вместо <span class='product'>{{ lastSearch }}</span> <br/>
@@ -25,12 +23,13 @@
   </div>
     
   <div class='buttons'>
-    <img class='repeat' src='/assets/repeat-button.svg' (click) = 'onRepeatClick()' />
-    <img class='share' src='/assets/share-button.svg' />
-    <img class='battle' src='/assets/battle-button.svg' />
+    <img class='repeat' src='/assets/repeat-button.svg' (click) = 'onRepeatClick()' title='Еще раз'/>
+    <img class='share' src='/assets/share-button.svg' title='Поделиться результатом'/>
+    <img class='battle' src='/assets/battle-button.svg' (click) = 'onTournamentClick()' title='Провести турнир'/>
   </div>
 </div>
 
+<!-- container for image previews -->
 <div class='image-preview-container' HidePreviewOnClick>
   <img class='image-preview' src='' HidePreviewOnClick/>
 </div>

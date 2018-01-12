@@ -3,10 +3,8 @@
 @import '../node_modules/jquery-bracket/src/jquery.bracket.sass'
 @import 'app/animations.sass'
 
-html,
-body
+html, body
     width: 100%
-    height: 100%
     padding: 0
     margin: 0
     font-family: 'Open Sans', sans-serif;
@@ -18,12 +16,17 @@ body
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00b88c', endColorstr='#0079b8',GradientType=1 )
     background-repeat: no-repeat
     background-attachment: fixed
+    perspective: 500px
 
     &.animated
         overflow: hidden
-        .recent-options
-            animation: fade-out 0.4s forwards
-            
+
+html 
+    height: 100%
+body
+    min-height: 100%
+    padding-bottom: 30px
+
 ::-webkit-scrollbar-track
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
 	background-color: #F5F5F5

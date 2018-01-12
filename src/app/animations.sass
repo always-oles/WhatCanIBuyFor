@@ -6,37 +6,45 @@
 
 @keyframes resultsFadeIn
     from
-        opacity: 0
         transform: scale(0.2) rotate(-90deg)
     to
-        opacity: 1
         transform: scale(1) rotate(0)
-
-
-@keyframes bagAnimation
-    0%
-        transform: translateY(150vh)
-    50%
-        transform: translateY(5vh)
-    55%
-        transform: rotate(-4deg) translateY(15vh)
-    65%
-        transform: translateY(5vh)
-    70%
-        transform: rotate(3deg) translateY(15vh)
-    80%
-        transform: translateY(5vh)
-    85%
-        transform: rotate(-4deg) translateY(15vh)
-
-@keyframes bagFadeOut
-    to
-        transform: translateY(150vh)
-        opacity: 0
-
 
 @keyframes fadeOut
     from
         opacity: 1
     to
         opacity: 0
+
+@keyframes tournamentFadeIn
+    from
+        opacity: 0
+    to
+        opacity: 1
+
+// Bag animations
+@keyframes bagFadeIn
+    0%
+        transform: translateY(150vh)
+    100%
+        transform: translateY(0)
+
+@keyframes bagShaking
+    0%
+        transform: translateY(0)
+    10%
+        transform: rotate(-4deg) translateY(15vh)
+    30%
+        transform: translateY(0)
+    40%
+        transform: rotate(3deg) translateY(15vh)
+    60%
+        transform: translateY(0)
+    70%
+        transform: rotate(-4deg) translateY(15vh)
+    90%
+        transform: translateY(0)
+
+@keyframes bagFadeOut
+    to
+        transform: translateY(150vh)
