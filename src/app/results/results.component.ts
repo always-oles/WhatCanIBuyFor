@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output, trigger, state, style, transition, animate } from '@angular/core';
+import { Component, EventEmitter, Output, trigger, state, style, transition, animate, Renderer2 } from '@angular/core';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../services/data.service';
 import AnimatableComponent from '../animatable-component.class';
+import { ItemInterface } from '../interfaces';
 import {
   MAIN_FORM_DONE,
   MAIN_FORM_HIDING,
@@ -33,7 +34,8 @@ export class ResultsComponent extends AnimatableComponent {
   public lastSearch: string = '';
 
   constructor(private dataService: DataService,
-              private globalAnimationState: GlobalAnimationStateService
+              private globalAnimationState: GlobalAnimationStateService,
+              private renderer: Renderer2
   ) {
     super();
 
@@ -53,6 +55,14 @@ export class ResultsComponent extends AnimatableComponent {
     this.dataService.getProducts().subscribe(items => {
       this.items = items;
     });
+  }
+
+  remove($event: any, item: ItemInterface): void {
+    // add kinda removed class to the whole item
+    this.renderer.addClass(this.renderer.parentNode($event.target.parentNode), 'removed');
+
+    // send id to backend
+    this.dataService.voteForRemoval(item);
   }
 
   onTournamentClick(): void {

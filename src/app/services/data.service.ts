@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { API_URL } from '../config';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { ItemInterface } from '../interfaces/';
+
 @Injectable()
 export class DataService {
     private products = new Subject<any>();
@@ -28,6 +30,14 @@ export class DataService {
     }
 
     public getLastSearch(): Observable<any> {
-        return this.lastSearch;
+        return this.lastSearch.asObservable();
+    }
+
+    public voteForRemoval(item: ItemInterface): void {
+        this.http
+            .post(API_URL + 'voteForRemoval', {
+                id: item.id,
+                title: item.title
+            }).subscribe();
     }
 }

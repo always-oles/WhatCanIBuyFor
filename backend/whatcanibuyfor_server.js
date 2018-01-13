@@ -4,8 +4,12 @@ const express       = require('express');
 const app           = express();
 const mongoose      = require('mongoose');
 const path          = require('path');
-const Product       = require('./models/Product');
 const Config        = require('./config');
+
+// DB Models
+const Product       = require('./models/Product');
+const Request       = require('./models/Request');
+const Removal       = require('./models/Removal');
 
 // mongoose basic setup
 mongoose.Promise = global.Promise;
@@ -83,6 +87,7 @@ const getRandomProducts = (body, response) => {
 
       // maps response to demanded format
       let items = result.map(item => ({
+          id: item._id,
           count: Math.floor(basicPrice / item.price),  
           title: item.title,
           price: item.price,
@@ -99,9 +104,41 @@ const getRandomProducts = (body, response) => {
   });
 };
 
-router.route('/whatElseCanIGet')
+router.route('/api/voteForRemoval')
+  .post((request, response) => { 
+
+    const requestData = {
+      ip: request.ip,
+      itemTitle: request.body.title,
+      itemId: request.body.id
+    };
+
+    // save removal vote to db
+    const R = new Removal(requestData).save((e) => {
+
+      // upon duplicate - find and update
+      if (e && e.code === 11000) {
+
+        // find our vote and increment votes counter
+        Removal.findOne({ itemId: requestData.itemId }, (error, vote) => {
+          if (!error) {
+            vote.votes++;
+            vote.save();
+          }
+        });
+      }
+    });
+
+    response.json('ok');
+  }); 
+
+
+router.route('/api/whatElseCanIGet')
   .post((request, response) => {
-    console.log(request.body);
+    const requestData = Object.assign({}, request.body, {ip: request.ip});
+
+    // save request to db
+    const R = new Request(requestData).save();
 
     // get products from db
     getRandomProducts(request.body, response);
