@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { API_URL } from '../config';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { ItemInterface } from '../interfaces/';
+import { Product } from '../interfaces/';
 
 @Injectable()
 export class DataService {
@@ -33,7 +33,7 @@ export class DataService {
         return this.lastSearch.asObservable();
     }
 
-    public voteForRemoval(item: ItemInterface): void {
+    public voteForRemoval(item: Product): void {
         this.http
             .post(API_URL + 'voteForRemoval', {
                 id: item.id,

@@ -49,7 +49,7 @@ export class MainFormComponent extends AnimatableComponent{
 
         // play formShrinks animation, then hide the form
         this.playAnimation('formShrinks', 1200, () => {
-          this.formVisible = false; 
+          this.formVisible = false;
 
           // reset form
           this.mainForm.reset({

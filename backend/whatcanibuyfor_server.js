@@ -142,6 +142,11 @@ router.route('/api/whatElseCanIGet')
 
     // get products from db
     getRandomProducts(request.body, response);
+  });
+
+router.route('/api/test')
+  .get((request, response) => {
+    response.json('hello world!');
   }); 
 
 app.use('/', router);

@@ -1,4 +1,5 @@
 .results-container
+    position: relative
     margin: 5% auto 0
     padding: 20px 20px
     width: 50%
@@ -9,11 +10,42 @@
     padding-bottom: 1px
     box-shadow: 2px 2px 6px 1px rgba(0,0,0,0.25)
 
+    &.loading
+        .loader-container
+            opacity: 1
+            visibility: visible
+        .buttons
+            opacity: 0
     &.fadeIn
         animation: resultsFadeIn 2s ease-out
-
     &.fadeDown
         animation: fadeDown 1s forwards
+
+    .loader-container
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        z-index: 900
+        background: rgba(255, 255, 255, 0.9)
+
+        display: flex        
+        justify-content: center
+        align-items: center
+        transition: all 0.6s
+
+        opacity: 0
+        visibility: hidden
+
+        .loader
+            border-radius: 50%
+            border: 3px solid #00d5a9
+            padding: 10px
+            background: #fff
+
+            & > img
+                width: 80px
 
     .title
         color: #333
@@ -64,7 +96,7 @@
             &.removed
                 opacity: 0.3
                 .vote-to-remove
-                    pointer-events: none;
+                    pointer-events: none
 
             &:nth-child(even)
                 background: #E6E6E6
@@ -96,19 +128,20 @@
                 color: #777
                 background: #fff                
                 border-radius: 50%
-                border: 1px solid #bbb
+                border: 0
                 transition: all 0.5s
                 outline: none
+                box-shadow: 2px 2px 6px 1px rgba(0,0,0,0.1)
 
                 &:hover
                     color: #f00
-                    transform: scale(1.1, 1.1)   
 
     .buttons
         position: relative
         top: 30px
         width: 100%
         text-align: center
+        transition: opacity 0.6s
 
         img
             cursor: pointer
@@ -118,6 +151,11 @@
                 transform: translateY(-3px)
             &:active
                 transform: scale(1.05)
+
+    .share-dialog
+        margin: 30px 0 0
+        position: relative
+        left: -15px
 
 .image-preview-container
     cursor: pointer

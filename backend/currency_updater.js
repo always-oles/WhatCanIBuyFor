@@ -21,6 +21,7 @@ const updateCurrencies = () => {
     axios.get(API_URL)
     .then(response => {
         let data = response.data;
+        console.log(data);
 
         // if we're good
         if (data && data.success === true && data.quotes) {

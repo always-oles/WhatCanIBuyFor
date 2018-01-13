@@ -3,6 +3,9 @@ import { DataService } from '../services/data.service';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import AnimatableComponent from '../animatable-component.class';
 import { TOURNAMENT_IN } from '../constants';
+// import * as jquery from 'jquery/dist/jquery.min.js';
+import 'jquery-bracket/dist/jquery.bracket.min.js';
+
 declare var $: any;
 
 @Component({
@@ -100,7 +103,7 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
     this.globalAnimationState.get().subscribe(animation => {
       // if it's time to animate results
       if (animation === TOURNAMENT_IN) {
-
+ 
         // make component visible
         this.tournamentVisible = true;
 

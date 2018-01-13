@@ -1,11 +1,13 @@
-<div 
-  class='results-container' 
-  [ngClass] = '{ hidden: !resultsVisible, fadeIn: fadeIn}'
->
-  
+<div class='results-container' [ngClass] = '{ hidden: !resultsVisible, fadeIn: fadeIn, loading: loading}'>
   <div class='title'>
     Итак, вместо <span class='product'>{{ lastSearch }}</span> <br/>
     вы можете купить:
+  </div>
+
+  <div class='loader-container'>
+    <div class='loader'>
+      <img src='/assets/loader.svg'/>
+    </div>
   </div>
 
   <div class='items-list'>
@@ -24,12 +26,15 @@
         <button class='vote-to-remove' (click)="remove($event, item)" title='Голосовать за удаление'> ✕ </button> 
       </div>
     </div>
+
+    <div class='share-dialog'>
+        <div class="sharethis-inline-share-buttons"></div>
+    </div>
   </div>
     
   <div class='buttons'>
     <img class='repeat' src='/assets/back-button.svg' title='Сначала'/>
-    <img class='refresh' src='/assets/refresh-button.svg' title='Повторить'/>
-    <img class='share' src='/assets/share-button.svg' title='Поделиться результатом'/>
+    <img class='refresh' src='/assets/refresh-button.svg' title='Повторить' (click) = 'refresh()'/>
     <img class='battle' src='/assets/battle-button.svg' (click) = 'onTournamentClick()' title='Провести турнир'/>
   </div>
 </div>
