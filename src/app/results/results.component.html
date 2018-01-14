@@ -1,6 +1,6 @@
-<div class='results-container' [ngClass] = '{ hidden: !resultsVisible, fadeIn: fadeIn, loading: loading}'>
+<div class='results-container' [ngClass] = '{ hidden: !resultsVisible, fadeIn: animations.fadeIn, loading: isLoading}'>
   <div class='title'>
-    Итак, вместо <span class='product'>{{ lastSearch }}</span> <br/>
+    Итак, вместо <span class='product'>{{ lastSearchProduct }}</span> <br/>
     вы можете купить:
   </div>
 
@@ -33,9 +33,9 @@
   </div>
     
   <div class='buttons'>
-    <img class='repeat' src='/assets/back-button.svg' title='Сначала'/>
+    <img class='restart' src='/assets/back-button.svg' title='Сначала' (click) = 'restart()'/>
     <img class='refresh' src='/assets/refresh-button.svg' title='Повторить' (click) = 'refresh()'/>
-    <img class='battle' src='/assets/battle-button.svg' (click) = 'onTournamentClick()' title='Провести турнир'/>
+    <img class='battle' src='/assets/battle-button.svg' title='Провести турнир' (click) = 'onTournamentClick()'/>
   </div>
 </div>
 

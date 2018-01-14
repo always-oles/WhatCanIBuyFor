@@ -1,4 +1,4 @@
-<div class='main-form-container' [ngClass]='{formShrinks: formShrinks, hidden: !formVisible}'>
+<div class='main-form-container' [ngClass]='{formShrinks: animations.formShrinks, hidden: !formVisible}'>
   <div class='yellow-border'></div>
 
   <form name='main-form' autocomplete="off" [formGroup]='mainForm' novalidate>
@@ -51,4 +51,7 @@
 </div>
 
 <!-- mystery baggerino -->
-<img class='mystery-bag' [ngClass]='{bagShaking: bagShaking, bagFadeIn: bagFadeIn, bagAnimated: bagAnimated, bagFadeOut: bagFadeOut}' #bag src='assets/bag.svg' alt='Mystery bag'/>
+<img class='mystery-bag' 
+     [ngClass]='{bagShaking: animations.bagShaking, bagFadeIn: animations.bagFadeIn, bagAnimated: animations.bagAnimated, bagFadeOut: animations.bagFadeOut}' 
+     #bag src='assets/bag.svg' 
+     alt='Mystery bag'/>

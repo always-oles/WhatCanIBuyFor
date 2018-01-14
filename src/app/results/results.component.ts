@@ -3,12 +3,13 @@ import { GlobalAnimationStateService } from '../services/global-animation-state.
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../services/data.service';
 import AnimatableComponent from '../animatable-component.class';
-import { Product } from '../interfaces';
+import { Product, SearchQuery } from '../interfaces';
 import { Meta } from '@angular/platform-browser';
 import {
   MAIN_FORM_DONE,
   MAIN_FORM_HIDING,
-  TOURNAMENT_IN
+  TOURNAMENT_IN,
+  REFRESH
 } from '../constants';
 
 @Component({
@@ -17,24 +18,22 @@ import {
   styleUrls: ['./results.component.sass']
 })
 export class ResultsComponent extends AnimatableComponent {
-  //@Output()
-  //public repeatClicked: EventEmitter<String> = new EventEmitter();
-
-  public loading: boolean = false;
-
-  // animation status
-  public fadeStatus: string = 'null';
+  public isLoading: boolean = false;
+  public loadingStarted: number = 0;
 
   // show/hide flag
-  public resultsVisible: boolean = true;
+  public resultsVisible: boolean = false;
 
   // result products array from backend
   public items: Array<Product>;
 
-  public fadeIn: boolean = false;
+  public animations: object = {
+    fadeIn: false
+  };
 
   // last search product name
-  public lastSearch: string = '';
+  public lastSearch: SearchQuery;
+  public lastSearchProduct: string = '';
 
   constructor(private dataService: DataService,
               private globalAnimationState: GlobalAnimationStateService,
@@ -44,22 +43,47 @@ export class ResultsComponent extends AnimatableComponent {
     super();
 
     // subscribe to last search query
-    this.dataService.getLastSearch().subscribe(lastSearch => this.lastSearch = lastSearch);
+    this.dataService.getLastSearch().subscribe(lastSearch => {
+      this.lastSearch = lastSearch;
+      this.lastSearchProduct = lastSearch.product;
+    });
 
     // subscribe to global animation state change
     this.globalAnimationState.get().subscribe(animation => {
+      console.log('results form received animation: ', animation);
+
       // if it's time to animate results
       if (animation === MAIN_FORM_DONE) {
         this.resultsVisible = true;
-        this.playAnimation('fadeIn', 2000);
+        //this.playAnimation('fadeIn', 2000);
       }
+
     });
 
     // subscribe to products receiving from backend
     this.dataService.getProducts().subscribe(items => {
       this.items = items;
 
+      // update meta tags
       this.updateMeta();
+
+      // if user sees a loader
+      if (this.isLoading) {
+
+        // if user seen loader more than 1s - hide it
+        if ((Date.now() - this.loadingStarted) > 1000) {
+          this.isLoading = false;
+          this.loadingStarted = 0;
+        } else {
+
+          // user has seen loader less than 1s
+          // let's add some time show the cute loader
+          setTimeout(() => {
+            this.isLoading = false;
+            this.loadingStarted = 0;
+          }, Math.floor(Math.random() * 500 + 500));
+        }
+      }
     });
   }
 
@@ -85,7 +109,7 @@ export class ResultsComponent extends AnimatableComponent {
     // update meta tag
     this.meta.updateTag({
       name: 'og:title',
-      content: 'Я могу купить "' + result + '"' + ' вместо ' + this.lastSearch;
+      content: 'Я могу купить "' + result + '" вместо ' + this.lastSearchProduct
     });
   }
 
@@ -113,17 +137,29 @@ export class ResultsComponent extends AnimatableComponent {
    * On refresh button click
    */
   refresh(): void {
-    this.loading = true;
+    // show loader
+    this.isLoading = true;
+    this.loadingStarted = Date.now();
 
-    setTimeout(() => this.loading = false, 2000);
+    // repeat initial request
+    this.dataService.sendProductsRequest(this.lastSearch);
+
+    // set global state to refreshing
+    this.globalAnimationState.set(REFRESH);
   }
 
-  // on Repeat button click
-  // onRepeatClick(): void {
-  //   console.warn('repeat clicked');
-  //   this.repeatClicked.emit();
+  /**
+   * On restart button click
+   */
+  restart(): void {
+    console.log('RESTART!');
+    // show loader
+    // this.isLoading = true;
+    // this.loadingStarted = Date.now();
 
-  //   // invoke fade down animation
-  //   this.fadeStatus = 'down';
-  // }
+    // // repeat initial request
+    // this.dataService.sendProductsRequest(this.lastSearch);
+
+    // this.globalAnimationState.set(REFRESH);
+  }
 }

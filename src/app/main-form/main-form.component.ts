@@ -15,11 +15,13 @@ import AnimatableComponent from '../animatable-component.class';
 export class MainFormComponent extends AnimatableComponent{
   public mainForm: FormGroup;
   public formVisible: boolean = true;
-  public animation: string;
-  public formShrinks: boolean = false;
-  public bagShaking: boolean = false;
-  public bagFadeOut: boolean = false;
-  public bagFadeIn: boolean = false;
+
+  public animations: object = {
+    formShrinks: false,
+    bagShaking: false,
+    bagFadeOut: false,
+    bagFadeIn: false
+  };
 
   @ViewChild('bag') bag: ElementRef;
 
@@ -48,14 +50,14 @@ export class MainFormComponent extends AnimatableComponent{
         this.renderer.addClass(document.body, 'animated');
 
         // play formShrinks animation, then hide the form
-        this.playAnimation('formShrinks', 1200, () => {
-          this.formVisible = false;
+        // this.playAnimation('formShrinks', 1200, () => {
+        //   this.formVisible = false;
 
-          // reset form
-          this.mainForm.reset({
-            currency: 'UAH'
-          });
-        });
+        //   // reset form
+        //   this.mainForm.reset({
+        //     currency: 'UAH'
+        //   });
+        // });
 
         // debuggin
         this.formVisible = false;

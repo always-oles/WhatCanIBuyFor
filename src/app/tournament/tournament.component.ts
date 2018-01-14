@@ -2,7 +2,7 @@ import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import AnimatableComponent from '../animatable-component.class';
-import { TOURNAMENT_IN } from '../constants';
+import { TOURNAMENT_IN, REFRESH } from '../constants';
 // import * as jquery from 'jquery/dist/jquery.min.js';
 import 'jquery-bracket/dist/jquery.bracket.min.js';
 
@@ -15,7 +15,10 @@ declare var $: any;
 })
 export class TournamentComponent extends AnimatableComponent implements OnInit {
   public tournamentVisible: boolean = false;
-  public fadeIn: boolean = false;
+  public animations: object = {
+    fadeIn: false,
+    fadeOut: false
+  };
   private maxChance: number = 15;
   private items: Array<Object>;
 
@@ -89,7 +92,8 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
   constructor(
     private el: ElementRef,
     private dataService: DataService,
-    private globalAnimationState: GlobalAnimationStateService
+    private globalAnimationState: GlobalAnimationStateService,
+    private renderer: Renderer2
   ) { super(); }
 
   ngOnInit() {
@@ -101,19 +105,35 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
 
     // subscribe to global animation state
     this.globalAnimationState.get().subscribe(animation => {
-      // if it's time to animate results
-      if (animation === TOURNAMENT_IN) {
- 
-        // make component visible
-        this.tournamentVisible = true;
 
-        // animate fade in
-        this.playAnimation('fadeIn', 500, () => {
+      switch (animation) {
 
-          // scroll to element
-          const offset = $('.brackets-container').get(0).offsetTop + $('.brackets-container').get(0).clientHeight;
-          $('html, body').animate({ scrollTop: offset }, 1500);
-        });
+        // user clicked on tournament button
+        case TOURNAMENT_IN:
+
+          // user clicked on tournament button while it's visible
+          if (this.tournamentVisible === true) { return; }
+
+          // make component visible
+          this.tournamentVisible = true;
+
+          // animate fade in
+          this.playAnimation('fadeIn', 300, () => {
+            // scroll to element
+            const offset = $('.brackets-container').get(0).offsetTop + $('.brackets-container').get(0).clientHeight;
+            $('html, body').animate({ scrollTop: offset }, 1000);
+          });
+        break;
+
+        // if user refreshes data
+        case REFRESH:
+
+          // clear element from built bracket
+          this.renderer.setProperty(this.el.nativeElement.querySelector('.match'), 'innerHTML', '');
+
+          // hide element
+          this.tournamentVisible = false;
+        break;
       }
     });
   }
@@ -121,11 +141,14 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
   buildBracket(): void {
     if (!this.items.length) { return; }
 
+    const chances = this.generateChances(this.items);
+
     $(this.el.nativeElement).find('.match').bracket({
-      init: this.generateChances(this.items),
+      init: chances,
       teamWidth: 220,
       matchMargin: 20,
-      roundMargin: 40
+      roundMargin: 40,
+      centerConnectors: true
     });
   }
 }

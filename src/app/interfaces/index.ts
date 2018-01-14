@@ -7,3 +7,9 @@ export interface Product {
     url: string;
     photo: string;
 }
+
+export interface SearchQuery {
+    product: string;
+    currency: string;
+    price: number;
+}

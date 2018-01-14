@@ -11,12 +11,24 @@ export class DataService {
     private lastSearch = new Subject<any>();
     constructor(private http: HttpClient) {}
 
-    public requestProducts(formData) {
+    /**
+     * Request products from backend
+     * @param formData - main form fields
+     */
+    public requestProducts(formData: any): void {
 
         // save search product name
-        this.lastSearch.next(formData.product);
+        this.lastSearch.next(formData);
 
-        // get data from backend
+        // send request to backend
+        this.sendProductsRequest(formData);
+    }
+
+    /**
+     * Helper function that can be called from outside
+     * to repeat initial form sending and get another data
+     */
+    public sendProductsRequest(formData: any): void {
         this.http
             .post(API_URL + 'whatElseCanIGet', formData)
             .subscribe(data => {
