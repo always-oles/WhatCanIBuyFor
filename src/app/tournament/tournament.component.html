@@ -1,3 +1,9 @@
-<div class='brackets-container' [ngClass]='{ hidden: !tournamentVisible, fadeIn: animations.fadeIn, fadeOut: animations.fadeOut }'>
+<div class='tournament-container' [ngClass]='{ hidden: !tournamentVisible, fadeIn: animations.fadeIn, fadeOut: animations.fadeOut }'>
+  <div class='preview' [ngClass]='{ fall: animations.fall }'>
+    <div class='image-container'>
+        <img class='image' src='/assets/swords.svg'/>
+    </div>
+  </div>
+
   <div class='match'></div>
 </div>

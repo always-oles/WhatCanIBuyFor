@@ -19,4 +19,14 @@ export default class AnimatableComponent {
             }
         }, time);
     }
-};
+
+    /**
+     * Reset all animations to default false state
+     */
+    protected resetAnimations() {
+        for (const animation of Object.keys(this['animations'])) {
+            this['animations'][animation] = false;
+        }
+    }
+}
+

@@ -18,10 +18,18 @@
 
 // tournament animations
 @keyframes tournamentFadeIn
-    from
-        opacity: 0
-    to
-        opacity: 1
+    0%
+        transform: translateY(100vh)
+    50%
+        transform: translateY(-50px)
+    90%
+        transform: translateY(0)
+
+@keyframes tournamentPreviewFall
+    0%
+        top: 0
+    100%
+        top: 100%
 
 @keyframes tournamentFadeOut
     from

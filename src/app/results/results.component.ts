@@ -8,8 +8,8 @@ import { Meta } from '@angular/platform-browser';
 import {
   MAIN_FORM_DONE,
   MAIN_FORM_HIDING,
-  TOURNAMENT_IN,
-  REFRESH
+  REFRESH,
+  RESULTS_FORM_LOADED
 } from '../constants';
 
 @Component({
@@ -56,6 +56,7 @@ export class ResultsComponent extends AnimatableComponent {
       if (animation === MAIN_FORM_DONE) {
         this.resultsVisible = true;
         //this.playAnimation('fadeIn', 2000);
+        this.globalAnimationState.set(RESULTS_FORM_LOADED);
       }
 
     });
@@ -72,19 +73,30 @@ export class ResultsComponent extends AnimatableComponent {
 
         // if user seen loader more than 1s - hide it
         if ((Date.now() - this.loadingStarted) > 1000) {
-          this.isLoading = false;
-          this.loadingStarted = 0;
+          this.afterRefreshHook()
         } else {
 
           // user has seen loader less than 1s
           // let's add some time show the cute loader
           setTimeout(() => {
-            this.isLoading = false;
-            this.loadingStarted = 0;
+            this.afterRefreshHook();
           }, Math.floor(Math.random() * 500 + 500));
         }
       }
     });
+  }
+
+  /**
+   * Is invoked after refresh is done
+   */
+  private afterRefreshHook(): void {
+
+    // hide loader, reset loading counter
+    this.isLoading = false;
+    this.loadingStarted = 0;
+
+    // notify tournaments component that we are ready
+    this.globalAnimationState.set(RESULTS_FORM_LOADED);
   }
 
   /**
@@ -124,13 +136,6 @@ export class ResultsComponent extends AnimatableComponent {
 
     // send id to backend
     this.dataService.voteForRemoval(item);
-  }
-
-  /**
-   * On show tournament bracket button click
-   */
-  onTournamentClick(): void {
-    this.globalAnimationState.set(TOURNAMENT_IN);
   }
 
   /**

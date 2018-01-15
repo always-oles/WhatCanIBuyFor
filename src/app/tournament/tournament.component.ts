@@ -2,7 +2,11 @@ import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import AnimatableComponent from '../animatable-component.class';
-import { TOURNAMENT_IN, REFRESH } from '../constants';
+import {
+  REFRESH,
+  MAIN_FORM_DONE,
+  RESULTS_FORM_LOADED
+ } from '../constants';
 // import * as jquery from 'jquery/dist/jquery.min.js';
 import 'jquery-bracket/dist/jquery.bracket.min.js';
 
@@ -10,17 +14,25 @@ declare var $: any;
 
 @Component({
   selector: 'app-tournament',
-  templateUrl: './tournament.component.html', 
+  templateUrl: './tournament.component.html',
   styleUrls: ['./tournament.component.sass']
 })
 export class TournamentComponent extends AnimatableComponent implements OnInit {
   public tournamentVisible: boolean = false;
   public animations: object = {
     fadeIn: false,
-    fadeOut: false
+    fadeOut: false,
+    fall: false
   };
   private maxChance: number = 15;
   private items: Array<Object>;
+
+  constructor(
+    private el: ElementRef,
+    private dataService: DataService,
+    private globalAnimationState: GlobalAnimationStateService,
+    private renderer: Renderer2
+  ) { super(); }
 
   /**
    * Generate chances for tournament products and split them by teams
@@ -89,14 +101,8 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
     return chance;
   }
 
-  constructor(
-    private el: ElementRef,
-    private dataService: DataService,
-    private globalAnimationState: GlobalAnimationStateService,
-    private renderer: Renderer2
-  ) { super(); }
-
   ngOnInit() {
+
     // upon products receive - build a bracket for them
     this.dataService.getProducts().subscribe(items => {
       this.items = items;
@@ -105,23 +111,16 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
 
     // subscribe to global animation state
     this.globalAnimationState.get().subscribe(animation => {
-
       switch (animation) {
 
-        // user clicked on tournament button
-        case TOURNAMENT_IN:
-
-          // user clicked on tournament button while it's visible
-          if (this.tournamentVisible === true) { return; }
-
+        // results form is fully loaded and visible
+        case RESULTS_FORM_LOADED:
           // make component visible
           this.tournamentVisible = true;
 
-          // animate fade in
-          this.playAnimation('fadeIn', 300, () => {
-            // scroll to element
-            const offset = $('.brackets-container').get(0).offsetTop + $('.brackets-container').get(0).clientHeight;
-            $('html, body').animate({ scrollTop: offset }, 1000);
+          // play fade in animation
+          this.playAnimation('fadeIn', 1500, () => {
+            this.playAnimation('fall', 1000, null, true);
           });
         break;
 
@@ -130,6 +129,9 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
 
           // clear element from built bracket
           this.renderer.setProperty(this.el.nativeElement.querySelector('.match'), 'innerHTML', '');
+
+          // reset animations
+          this.resetAnimations();
 
           // hide element
           this.tournamentVisible = false;
