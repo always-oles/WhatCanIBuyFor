@@ -7,6 +7,7 @@ export class GlobalAnimationStateService {
   private subject = new Subject<any>();
 
   public set(state) {
+    console.warn('global animation set to: ', state);
     this.subject.next(state);
   }
 

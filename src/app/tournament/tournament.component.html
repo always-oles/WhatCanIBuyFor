@@ -1,9 +1,19 @@
-<div class='tournament-container' [ngClass]='{ hidden: !tournamentVisible, fadeIn: animations.fadeIn, fadeOut: animations.fadeOut }'>
+<div class='tournament-container' 
+     [ngClass]='{ 
+       hidden: !componentVisible, 
+       fadeIn: animations.fadeIn, 
+       slideDown: animations.slideDown
+      }'
+>
+  
+  <!-- kinda preloader with swords image -->
   <div class='preview' [ngClass]='{ fall: animations.fall }'>
     <div class='image-container'>
         <img class='image' src='/assets/swords.svg'/>
     </div>
   </div>
 
+  <!-- actual tournament/bracket container -->
   <div class='match'></div>
+
 </div>

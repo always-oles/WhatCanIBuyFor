@@ -1,4 +1,11 @@
-<div class='results-container' [ngClass] = '{ hidden: !resultsVisible, fadeIn: animations.fadeIn, loading: isLoading}'>
+<div class='results-container' 
+     [ngClass] = '{ 
+       hidden: !componentVisible, 
+       fadeIn: animations.fadeIn, 
+       loading: isLoading,
+       slideRight: animations.slideRight
+      }'
+>
   <div class='title'>
     Итак, вместо <span class='product'>{{ lastSearchProduct }}</span> <br/>
     вы можете купить:

@@ -1,14 +1,38 @@
+// Results component appearance
+@keyframes resultsFadeIn
+    0%
+        transform: scale(0.1) rotate(-90deg)
+    60%
+        transform: scale(0.5) rotate(-90deg)
+    100%
+        transform: scale(1) rotate(0)
+
+// Results component hiding
+@keyframes slideRight
+    from
+        transform: translateX(0)
+    to
+        transform: translateX(100vw)
+
+@keyframes slideDown
+    from
+        transform: translateY(0)
+    to
+        transform: translateY(200%)
+
+@keyframes slideFromLeft
+    0%
+        transform: translateX(-100vw)
+    60%
+        transform: translateX(100px)
+    100%
+        transform: translateX(0)
+
 @keyframes formAnimation
     from
         transform: scale(1) rotate(0)
     to
         transform: scale(0.3) rotate(-90deg)
-
-@keyframes resultsFadeIn
-    from
-        transform: scale(0.2) rotate(-90deg)
-    to
-        transform: scale(1) rotate(0)
 
 @keyframes fadeOut
     from

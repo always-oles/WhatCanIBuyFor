@@ -144,9 +144,24 @@ router.route('/api/whatElseCanIGet')
     getRandomProducts(request.body, response);
   });
 
-router.route('/api/test')
+router.route('/api/recentBetterOptions')
   .get((request, response) => {
-    response.json('hello world!');
+
+    // lets get some random items
+    Product.aggregate([ 
+      {$match : 
+          {title: 
+              {$regex: /^.{1,30}$/ig }
+          }
+      },
+      {$sample: {size: 5}}
+    ], 
+      (error, items) => {
+        if (error) { response.json(error); }
+
+        response.json(items);
+      }
+    );
   }); 
 
 app.use('/', router);

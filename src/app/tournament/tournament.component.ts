@@ -5,7 +5,9 @@ import AnimatableComponent from '../animatable-component.class';
 import {
   REFRESH,
   MAIN_FORM_DONE,
-  RESULTS_FORM_LOADED
+  RESULTS_HIDING,
+  RESULTS_LOADED,
+  RESULTS_HIDDEN
  } from '../constants';
 // import * as jquery from 'jquery/dist/jquery.min.js';
 import 'jquery-bracket/dist/jquery.bracket.min.js';
@@ -18,10 +20,10 @@ declare var $: any;
   styleUrls: ['./tournament.component.sass']
 })
 export class TournamentComponent extends AnimatableComponent implements OnInit {
-  public tournamentVisible: boolean = false;
+  public componentVisible: boolean = false;
   public animations: object = {
     fadeIn: false,
-    fadeOut: false,
+    slideDown: false,
     fall: false
   };
   private maxChance: number = 15;
@@ -103,7 +105,7 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
 
   ngOnInit() {
 
-    // upon products receive - build a bracket for them
+    // upon products received - build a bracket for them
     this.dataService.getProducts().subscribe(items => {
       this.items = items;
       this.buildBracket();
@@ -114,9 +116,9 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
       switch (animation) {
 
         // results form is fully loaded and visible
-        case RESULTS_FORM_LOADED:
+        case RESULTS_LOADED:
           // make component visible
-          this.tournamentVisible = true;
+          this.componentVisible = true;
 
           // play fade in animation
           this.playAnimation('fadeIn', 1500, () => {
@@ -124,27 +126,50 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
           });
         break;
 
+        // When results are sliding to the right
+        case RESULTS_HIDING:
+
+          // fade out animation
+          this.playAnimation('slideDown', 1000, () => {
+
+            // reset everything when hidden
+            this.componentVisible = false;
+            this.resetAnimations();
+            this.resetMatchHTML();
+          });
+        break;
+
         // if user refreshes data
         case REFRESH:
-
-          // clear element from built bracket
-          this.renderer.setProperty(this.el.nativeElement.querySelector('.match'), 'innerHTML', '');
+          this.resetMatchHTML();
 
           // reset animations
           this.resetAnimations();
 
           // hide element
-          this.tournamentVisible = false;
+          this.componentVisible = false;
         break;
       }
     });
   }
 
-  buildBracket(): void {
+  /**
+   * Clear widget from created bracket
+   */
+  private resetMatchHTML(): void {
+    this.renderer.setProperty(this.el.nativeElement.querySelector('.match'), 'innerHTML', '');
+  }
+
+  /**
+   * Build a tournament bracket for current items
+   */
+  private buildBracket(): void {
     if (!this.items.length) { return; }
 
+    // generate chances and teams
     const chances = this.generateChances(this.items);
 
+    // build the actual bracket
     $(this.el.nativeElement).find('.match').bracket({
       init: chances,
       teamWidth: 220,

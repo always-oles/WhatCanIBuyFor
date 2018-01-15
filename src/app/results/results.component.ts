@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, trigger, state, style, transition, animate, Renderer2 } from '@angular/core';
+import { Component, EventEmitter, OnInit, trigger, state, style, transition, animate, Renderer2 } from '@angular/core';
 import { GlobalAnimationStateService } from '../services/global-animation-state.service';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../services/data.service';
@@ -9,7 +9,9 @@ import {
   MAIN_FORM_DONE,
   MAIN_FORM_HIDING,
   REFRESH,
-  RESULTS_FORM_LOADED
+  RESULTS_LOADED,
+  RESULTS_HIDING,
+  RESULTS_HIDDEN
 } from '../constants';
 
 @Component({
@@ -17,18 +19,18 @@ import {
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.sass']
 })
-export class ResultsComponent extends AnimatableComponent {
+export class ResultsComponent extends AnimatableComponent implements OnInit {
   public isLoading: boolean = false;
   public loadingStarted: number = 0;
-
-  // show/hide flag
-  public resultsVisible: boolean = false;
+  public componentVisible: boolean = false;
 
   // result products array from backend
   public items: Array<Product>;
 
+  // animations collection
   public animations: object = {
-    fadeIn: false
+    fadeIn: false,
+    slideRight: false
   };
 
   // last search product name
@@ -39,8 +41,9 @@ export class ResultsComponent extends AnimatableComponent {
               private globalAnimationState: GlobalAnimationStateService,
               private renderer: Renderer2,
               private meta: Meta
-  ) {
-    super();
+  ) { super(); }
+
+  ngOnInit() {
 
     // subscribe to last search query
     this.dataService.getLastSearch().subscribe(lastSearch => {
@@ -50,13 +53,13 @@ export class ResultsComponent extends AnimatableComponent {
 
     // subscribe to global animation state change
     this.globalAnimationState.get().subscribe(animation => {
-      console.log('results form received animation: ', animation);
 
       // if it's time to animate results
       if (animation === MAIN_FORM_DONE) {
-        this.resultsVisible = true;
-        //this.playAnimation('fadeIn', 2000);
-        this.globalAnimationState.set(RESULTS_FORM_LOADED);
+        this.componentVisible = true;
+        this.playAnimation('fadeIn', 2000, () => {
+          this.globalAnimationState.set(RESULTS_LOADED);
+        });
       }
 
     });
@@ -73,7 +76,7 @@ export class ResultsComponent extends AnimatableComponent {
 
         // if user seen loader more than 1s - hide it
         if ((Date.now() - this.loadingStarted) > 1000) {
-          this.afterRefreshHook()
+          this.afterRefreshHook();
         } else {
 
           // user has seen loader less than 1s
@@ -96,7 +99,7 @@ export class ResultsComponent extends AnimatableComponent {
     this.loadingStarted = 0;
 
     // notify tournaments component that we are ready
-    this.globalAnimationState.set(RESULTS_FORM_LOADED);
+    this.globalAnimationState.set(RESULTS_LOADED);
   }
 
   /**
@@ -157,14 +160,19 @@ export class ResultsComponent extends AnimatableComponent {
    * On restart button click
    */
   restart(): void {
-    console.log('RESTART!');
-    // show loader
-    // this.isLoading = true;
-    // this.loadingStarted = Date.now();
+    this.globalAnimationState.set(RESULTS_HIDING);
 
-    // // repeat initial request
-    // this.dataService.sendProductsRequest(this.lastSearch);
+    // Slide to right
+    this.playAnimation('slideRight', 1000, () => {
 
-    // this.globalAnimationState.set(REFRESH);
+      // a flag for main form to slide from left
+      this.globalAnimationState.set(RESULTS_HIDDEN);
+
+      // hide this component
+      this.componentVisible = false;
+
+      // reset animations
+      this.resetAnimations();
+    });
   }
 }

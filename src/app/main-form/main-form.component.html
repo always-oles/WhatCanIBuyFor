@@ -1,4 +1,10 @@
-<div class='main-form-container' [ngClass]='{formShrinks: animations.formShrinks, hidden: !formVisible}'>
+<div class='main-form-container' 
+     [ngClass]='{
+        formShrinks: animations.formShrinks, 
+        hidden: !componentVisible,
+        slideFromLeft: animations.slideFromLeft
+      }'
+>
   <div class='yellow-border'></div>
 
   <form name='main-form' autocomplete="off" [formGroup]='mainForm' novalidate>
@@ -9,7 +15,7 @@
         <input 
           type='text' 
           name='item' 
-          placeholder='Something' 
+          placeholder='Что-нибудь' 
           autocomplete='off'  
           formControlName='product' 
           [ngClass] = "{invalid: mainForm.controls['product'].dirty && !mainForm.controls['product'].valid }"
@@ -24,7 +30,7 @@
             <input 
               type='text' 
               name='price' 
-              placeholder='100' 
+              placeholder='9000' 
               class='price-input' 
               autocomplete="off" 
               formControlName='price' 

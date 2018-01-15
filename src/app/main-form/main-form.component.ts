@@ -3,9 +3,13 @@ import { GlobalAnimationStateService } from '../services/global-animation-state.
 import { DataService } from '../services/data.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as mojs from 'mo-js';
-import { MAIN_FORM_DONE, MAIN_FORM_HIDING } from '../constants';
 import { Subscription } from 'rxjs/Subscription';
 import AnimatableComponent from '../animatable-component.class';
+import {
+  MAIN_FORM_DONE,
+  MAIN_FORM_HIDING,
+  RESULTS_HIDDEN
+} from '../constants';
 
 @Component({
   selector: 'app-main-form',
@@ -14,13 +18,14 @@ import AnimatableComponent from '../animatable-component.class';
 })
 export class MainFormComponent extends AnimatableComponent{
   public mainForm: FormGroup;
-  public formVisible: boolean = true;
+  public componentVisible: boolean = true;
 
-  public animations: object = {
+  public animations: any = {
     formShrinks: false,
     bagShaking: false,
     bagFadeOut: false,
-    bagFadeIn: false
+    bagFadeIn: false,
+    fadeFromLeft: false
   };
 
   @ViewChild('bag') bag: ElementRef;
@@ -44,59 +49,75 @@ export class MainFormComponent extends AnimatableComponent{
     // upon global animation state change
     this.globalAnimationState.get().subscribe(animation => {
 
-      // if we have just requested products from backend
-      if (animation === MAIN_FORM_HIDING) {
-        // add animation class to body to hide overflow
-        this.renderer.addClass(document.body, 'animated');
+      switch (animation) {
 
-        // play formShrinks animation, then hide the form
-        // this.playAnimation('formShrinks', 1200, () => {
-        //   this.formVisible = false;
+        // when result component is completely hidden
+        // lets fade from left
+        case RESULTS_HIDDEN:
+          this.componentVisible = true;
+          this.playAnimation('slideFromLeft', 1000);
+        break;
 
-        //   // reset form
-        //   this.mainForm.reset({
-        //     currency: 'UAH'
-        //   });
-        // });
-
+        case MAIN_FORM_HIDING:
+          // prevent scrollbar flickering
+          this.renderer.addClass(document.body, 'animated');
+        
         // debuggin
-        this.formVisible = false;
-        this.globalAnimationState.set(MAIN_FORM_DONE);
-        this.renderer.removeClass(document.body, 'animated');
+        //this.componentVisible = false;
+        //this.globalAnimationState.set(MAIN_FORM_DONE);
+        //this.renderer.removeClass(document.body, 'animated');
         /////////////////
 
+        // play formShrinks animation, then hide the form
+        this.playAnimation('formShrinks', 1200, () => {
+
+          // reset the form
+          this.mainForm.reset({
+            currency: 'UAH'
+          });
+
+        }, true);
+
         // play bag animations chained
-        // this.playAnimation('bagFadeIn', 2000, () => {
+        this.playAnimation('bagFadeIn', 2000, () => {
+          // hide the form
+          this.componentVisible = false;
 
-        //   // invoke first particles burst
-        //   this.invokeBurst();
+          // invoke first particles burst
+          this.invokeBurst();
 
-        //   // next bursts by interval
-        //   this.burstsIntervalHolder = setInterval(() => {
-        //     this.invokeBurst();
-        //   }, this.burstsInterval);
+          // next bursts by interval
+          this.burstsIntervalHolder = setInterval(() => {
+            this.invokeBurst();
+          }, this.burstsInterval);
 
-        //   // start shaking bag
-        //   this.playAnimation('bagShaking', 1700, () => {
+          // start shaking bag
+          this.playAnimation('bagShaking', 1700, () => {
 
-        //     // notify result form
-        //     this.globalAnimationState.set(MAIN_FORM_DONE);
+            // notify result form
+            this.globalAnimationState.set(MAIN_FORM_DONE);
 
-        //     // then fade out
-        //     this.playAnimation('bagFadeOut', 1300, () => {
-        //       this.bagFadeIn = false;
-        //       this.bagShaking = false;
-        //     });
+            // then fade out
+            this.playAnimation('bagFadeOut', 1300, () => {
+              this.resetAnimations();
+            });
+          }, true);
+        }, true);
 
-        //   }, true);
-        // }, true);
+        break;
       }
     });
 
-    // init the reactive main form model
+    // init the reactive form model
+    // this.mainForm = this.formBuilder.group({
+    //   product: ['Что-нибудь такоееее', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+    //   price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])],
+    //   currency: ['UAH']
+    // });
+
     this.mainForm = this.formBuilder.group({
-      product: ['Что-нибудь такоееее', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
-      price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])],
+      product: [null, Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+      price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
       currency: ['UAH']
     });
 
