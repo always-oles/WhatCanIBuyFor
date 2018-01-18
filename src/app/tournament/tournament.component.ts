@@ -1,7 +1,7 @@
 import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
 import { DataService } from '../shared/services/data.service';
 import { GlobalStateService } from '../shared/services/global-state.service';
-import AnimatableComponent from '../animatable-component.class';
+import AnimatableComponent from '../shared/animatable-component.class';
 import {
   REFRESH,
   MAIN_FORM_DONE,
@@ -21,7 +21,7 @@ declare var $: any;
 })
 export class TournamentComponent extends AnimatableComponent implements OnInit {
   public componentVisible: boolean = false;
-  public animations: object = {
+  public animations: any = {
     fadeIn: false,
     slideDown: false,
     fall: false
@@ -41,15 +41,16 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
    * @param items Array of objects
    */
   private generateChances(items): Object {
-    let teams = [],
-        firstTeam,
+    const teams = [],
+          roundOne = [],
+          roundTwo = [];
+
+    let firstTeam,
         secondTeam,
         firstTeamChances,
         secondTeamChances,
         previousRandom,
-        j = 0,
-        roundOne = [],
-        roundTwo = [];
+        j = 0;
 
     for (let i = 0; i < Object.values(items).length; i++) {
       firstTeam = items[i];

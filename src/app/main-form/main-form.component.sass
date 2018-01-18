@@ -1,4 +1,4 @@
-@import '../mixins.sass'
+@import '../../assets/css/mixins.sass'
 
 .main-form-container
     margin: 11% auto 0
@@ -11,8 +11,13 @@
     box-shadow: 2px 2px 6px 1px rgba(0,0,0,0.25)
     perspective: 500px
 
-    // +media(min, 1000px)
-    //     width: 20%
+    ///////////////////////////
+    +media(max, 1075px)
+        width: 60%
+    +media(max, 875px)
+        width: 80%
+    +media(max, sm)
+        width: 90%
 
     &.slideFromLeft
         animation: slideFromLeft 1s forwards ease-out
@@ -31,9 +36,12 @@
 
         label
             display: block
-            font-size: 2.7rem
+            font-size: 2.5rem
             font-weight: 500
             color: #4D4D4D
+            
+            +media(max, sm)
+                font-size: 2rem
         
         input
             padding: 15px
@@ -49,10 +57,12 @@
                 border-radius: 2px
             &::placeholder
                 color: #B3B3B3
-                
             &:focus
                 &::placeholder
                     visibility: hidden
+
+            +media(max, sm)
+                font-size: 1.4rem
 
         input[name='item']
             background: url(/assets/icon-cart.png) no-repeat 6px 16px
@@ -84,6 +94,9 @@
             vertical-align: top
             outline: none
             appearance: none
+
+            +media(max, sm)
+                font-size: 1.3rem
     
     .submit-button
         display: block
@@ -122,13 +135,25 @@
             transform: translateY(2px)
             box-shadow: none
 
+        +media(max, sm)
+            font-size: 1.3rem
+
 .mystery-bag
     position: absolute
     top: 3vh
     left: 28%
     z-index: 999
-    width: 40vw
+    width: 40%
+    min-width: 300px
     display: none
+
+    +media(max, 992px)
+        width: 70%
+        left: 15%
+
+    +media(max, sm)
+        width: 85%
+        left: 5%
 
     &.bagFadeIn
         display: block

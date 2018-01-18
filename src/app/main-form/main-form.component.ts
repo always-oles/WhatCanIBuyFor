@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import * as mojs from 'mo-js';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
-import AnimatableComponent from '../animatable-component.class';
+import AnimatableComponent from '../shared/animatable-component.class';
 import {
   MAIN_FORM_DONE,
   MAIN_FORM_HIDING,
@@ -118,7 +118,6 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
     // this.mainForm = this.formBuilder.group({
     //   product: [null, Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
     //   price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
-    //   currency: ['UAH']
     // });
 
     // init dummy object for burst

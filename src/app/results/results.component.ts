@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, trigger, state, style, transition, ani
 import { GlobalStateService } from '../shared/services/global-state.service';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../shared/services/data.service';
-import AnimatableComponent from '../animatable-component.class';
+import AnimatableComponent from '../shared/animatable-component.class';
 import { Product, SearchQuery } from '../shared/interfaces';
 import { Meta } from '@angular/platform-browser';
 import {
@@ -28,7 +28,7 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
   public items: Array<Product>;
 
   // animations collection
-  public animations: object = {
+  public animations: any = {
     fadeIn: false,
     slideRight: false
   };

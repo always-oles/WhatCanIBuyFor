@@ -1,0 +1,30 @@
+$screenSizes: ("xs": "576px", "sm": "768px", "md": "992px", "lg": "1200px")
+
+/**
+  * Add a media query to specific element
+  * Examples of usage:
+  * 
+  * Small devices only:
+  * +media(max, sm)
+  *   -- your rules --
+  * 
+  * Min screen width 1024px:
+  * +media(min, 1024px)
+  *   -- your rules --
+  * 
+  * For large (>1200px) devices:
+  * +media(min, lg)
+  *   -- your rules --
+  */
+
+=media($maxOrMin, $size)
+    /**
+      * replace size with value 
+      * if exists in screenSizes map
+      */
+    @each $key, $value in $screenSizes
+        @if $size == $key
+            $size: $value
+
+    @media only screen and (#{$maxOrMin}-width: $size) 
+        @content
