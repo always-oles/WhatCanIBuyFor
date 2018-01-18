@@ -8,21 +8,21 @@ import { Product } from '../interfaces/';
 @Injectable()
 export class DataService {
     private products = new Subject<any>();
-    private betterOptions = new Subject<any>();
+    private suggestions = new Subject<any>();
     private lastSearch = new Subject<any>();
     constructor(private http: HttpClient) {}
 
     /**
      * Get recent better options from backend
      */
-    public requestBetterOptions(): Observable<Product> {
+    public getSuggestions(): Observable<any> {
         this.http
-            .get(API_URL + 'recentBetterOptions')
+            .get(API_URL + 'suggestions')
             .subscribe(data => {
-                this.betterOptions.next(data);
+                this.suggestions.next(data);
             });
 
-        return this.betterOptions.asObservable();
+        return this.suggestions.asObservable();
     }
 
     /**
@@ -75,12 +75,5 @@ export class DataService {
      */
     public getLastSearch(): Observable<any> {
         return this.lastSearch.asObservable();
-    }
-
-    /**
-     * Subscription to recent products
-     */
-    public getBetterOptions(): Observable<any> {
-        return this.betterOptions.asObservable();
     }
 }

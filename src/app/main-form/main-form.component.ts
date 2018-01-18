@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as mojs from 'mo-js';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/map';
 import AnimatableComponent from '../animatable-component.class';
 import {
   MAIN_FORM_DONE,
@@ -11,12 +12,14 @@ import {
   RESULTS_HIDDEN
 } from '../constants';
 
+import * as superplaceholder from 'superplaceholder/dist/superplaceholder.min';
+
 @Component({
   selector: 'app-main-form',
   templateUrl: './main-form.component.html',
   styleUrls: ['./main-form.component.sass']
 })
-export class MainFormComponent extends AnimatableComponent{
+export class MainFormComponent extends AnimatableComponent implements OnInit {
   public mainForm: FormGroup;
   public componentVisible: boolean = true;
 
@@ -29,7 +32,7 @@ export class MainFormComponent extends AnimatableComponent{
   };
 
   @ViewChild('bag') bag: ElementRef;
-
+  @ViewChild('product') product: ElementRef;
 
   // mystery bag animation helpers
   public burst: any = null;
@@ -135,6 +138,32 @@ export class MainFormComponent extends AnimatableComponent{
         duration:     1800
       }
     });
+  }
+
+  ngOnInit() {
+    // get suggestions for product input
+    this.dataService.getSuggestions()
+
+      // remap them to titles array
+      .map(suggestions => suggestions.map(item => item.title))
+      .subscribe(suggestions => {
+
+        // initiate suggestions in input placeholder
+        // thanks https://github.com/chinchang/superplaceholder.js
+        superplaceholder({
+          el: this.product.nativeElement,
+          sentences: suggestions,
+          options: {
+            letterDelay: 70,
+            sentenceDelay: 1000,
+            startOnFocus: false,
+            loop: true,
+            shuffle: true,
+            showCursor: true,
+            cursor: '|'
+          }
+        });
+      });
   }
 
   onSubmitClick(e) {

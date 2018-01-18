@@ -32,6 +32,7 @@
     "postcss-cssnext": "^3.0.2",
     "request-ip": "^2.0.2",
     "rxjs": "^5.5.2",
+    "superplaceholder": "^0.1.1",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.14"
   },

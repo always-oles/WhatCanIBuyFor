@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MainFormComponent } from './main-form/main-form.component';
-import { RecentOptionsComponent } from './recent-options/recent-options.component';
 import { ResultsComponent } from './results/results.component';
 import { GlobalAnimationStateService } from './services/global-animation-state.service';
 import { DataService } from './services/data.service';
@@ -19,7 +18,6 @@ import { ScrollOnLoadDirective } from './directives/scroll-on-load.directive';
   declarations: [
     AppComponent,
     MainFormComponent,
-    RecentOptionsComponent,
     ResultsComponent,
     OnlyNumberDirective,
     TooltipImageDirective,

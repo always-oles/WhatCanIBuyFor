@@ -144,7 +144,7 @@ router.route('/api/whatElseCanIGet')
     getRandomProducts(request.body, response);
   });
 
-router.route('/api/recentBetterOptions')
+router.route('/api/suggestions')
   .get((request, response) => {
 
     // lets get some random items
@@ -154,10 +154,13 @@ router.route('/api/recentBetterOptions')
               {$regex: /^.{1,30}$/ig }
           }
       },
-      {$sample: {size: 5}}
+      {$sample: {size: 25}}
     ], 
       (error, items) => {
         if (error) { response.json(error); }
+        
+        // remove all unwanted stuff from items
+        items = items.filter(item => !/прода/i.test(item.title));
 
         response.json(items);
       }
