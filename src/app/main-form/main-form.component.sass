@@ -144,16 +144,16 @@
     left: 28%
     z-index: 999
     width: 40%
-    min-width: 300px
+    min-width: 200px
     display: none
 
-    +media(max, 992px)
-        width: 70%
-        left: 15%
+    +media(max, xs)
+        width: 90%
+        left: 4%
 
-    +media(max, sm)
-        width: 85%
-        left: 5%
+    +media-between(xs, md)
+        width: 65%
+        left: 14%
 
     &.bagFadeIn
         display: block
