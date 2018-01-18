@@ -1,6 +1,6 @@
 import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
-import { DataService } from '../services/data.service';
-import { GlobalAnimationStateService } from '../services/global-animation-state.service';
+import { DataService } from '../shared/services/data.service';
+import { GlobalStateService } from '../shared/services/global-state.service';
 import AnimatableComponent from '../animatable-component.class';
 import {
   REFRESH,
@@ -8,8 +8,8 @@ import {
   RESULTS_HIDING,
   RESULTS_LOADED,
   RESULTS_HIDDEN
- } from '../constants';
-// import * as jquery from 'jquery/dist/jquery.min.js';
+ } from '../shared/constants';
+
 import 'jquery-bracket/dist/jquery.bracket.min.js';
 
 declare var $: any;
@@ -32,7 +32,7 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
   constructor(
     private el: ElementRef,
     private dataService: DataService,
-    private globalAnimationState: GlobalAnimationStateService,
+    private globalState: GlobalStateService,
     private renderer: Renderer2
   ) { super(); }
 
@@ -95,7 +95,6 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
 
       // repeat until we have another chance
       while (chance === cantBe) {
-        console.warn('duplicate: ', chance, cantBe);
         chance = Math.floor(Math.random() * this.maxChance + 1);
       }
     }
@@ -112,7 +111,7 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
     });
 
     // subscribe to global animation state
-    this.globalAnimationState.get().subscribe(animation => {
+    this.globalState.get().subscribe(animation => {
       switch (animation) {
 
         // results form is fully loaded and visible

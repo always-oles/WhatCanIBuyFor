@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { GlobalAnimationStateService } from '../services/global-animation-state.service';
-import { DataService } from '../services/data.service';
+import { GlobalStateService } from '../shared/services/global-state.service';
+import { DataService } from '../shared/services/data.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as mojs from 'mo-js';
 import { Subscription } from 'rxjs/Subscription';
@@ -10,7 +10,7 @@ import {
   MAIN_FORM_DONE,
   MAIN_FORM_HIDING,
   RESULTS_HIDDEN
-} from '../constants';
+} from '../shared/constants';
 
 import * as superplaceholder from 'superplaceholder/dist/superplaceholder.min';
 
@@ -43,14 +43,14 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
   public burstsNeeded: number = 3;
 
   constructor(private renderer: Renderer2,
-              private globalAnimationState: GlobalAnimationStateService,
+              private globalState: GlobalStateService,
               private dataService: DataService,
               private formBuilder: FormBuilder
   ) {
     super();
 
     // upon global animation state change
-    this.globalAnimationState.get().subscribe(animation => {
+    this.globalState.get().subscribe(animation => {
 
       switch (animation) {
 
@@ -67,7 +67,7 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
         
         // debuggin
         //this.componentVisible = false;
-        //this.globalAnimationState.set(MAIN_FORM_DONE);
+        //this.globalState.set(MAIN_FORM_DONE);
         //this.renderer.removeClass(document.body, 'animated');
         /////////////////
 
@@ -75,9 +75,7 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
         this.playAnimation('formShrinks', 1200, () => {
 
           // reset the form
-          this.mainForm.reset({
-            currency: 'UAH'
-          });
+          this.mainForm.reset();
 
         }, true);
 
@@ -98,7 +96,7 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
           this.playAnimation('bagShaking', 1700, () => {
 
             // notify result form
-            this.globalAnimationState.set(MAIN_FORM_DONE);
+            this.globalState.set(MAIN_FORM_DONE);
 
             // then fade out
             this.playAnimation('bagFadeOut', 1300, () => {
@@ -112,17 +110,16 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
     });
 
     // init the reactive form model
+    this.mainForm = this.formBuilder.group({
+      product: ['Что-нибудь', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+      price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])]
+    });
+
     // this.mainForm = this.formBuilder.group({
-    //   product: ['Что-нибудь такоееее', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
-    //   price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])],
+    //   product: [null, Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+    //   price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
     //   currency: ['UAH']
     // });
-
-    this.mainForm = this.formBuilder.group({
-      product: [null, Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
-      price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
-      currency: ['UAH']
-    });
 
     // init dummy object for burst
     this.burst = new mojs.Burst({
@@ -170,7 +167,7 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
     e.preventDefault();
 
     // set global animation state
-    this.globalAnimationState.set(MAIN_FORM_HIDING);
+    this.globalState.set(MAIN_FORM_HIDING);
 
     // request products from backend
     this.dataService.requestProducts(this.mainForm.value);

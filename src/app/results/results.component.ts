@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnInit, trigger, state, style, transition, animate, Renderer2 } from '@angular/core';
-import { GlobalAnimationStateService } from '../services/global-animation-state.service';
+import { GlobalStateService } from '../shared/services/global-state.service';
 import { Subscription } from 'rxjs/Subscription';
-import { DataService } from '../services/data.service';
+import { DataService } from '../shared/services/data.service';
 import AnimatableComponent from '../animatable-component.class';
-import { Product, SearchQuery } from '../interfaces';
+import { Product, SearchQuery } from '../shared/interfaces';
 import { Meta } from '@angular/platform-browser';
 import {
   MAIN_FORM_DONE,
@@ -12,7 +12,7 @@ import {
   RESULTS_LOADED,
   RESULTS_HIDING,
   RESULTS_HIDDEN
-} from '../constants';
+} from '../shared/constants';
 
 @Component({
   selector: 'app-results',
@@ -38,7 +38,7 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
   public lastSearchProduct: string = '';
 
   constructor(private dataService: DataService,
-              private globalAnimationState: GlobalAnimationStateService,
+              private globalState: GlobalStateService,
               private renderer: Renderer2,
               private meta: Meta
   ) { super(); }
@@ -52,13 +52,13 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
     });
 
     // subscribe to global animation state change
-    this.globalAnimationState.get().subscribe(animation => {
+    this.globalState.get().subscribe(animation => {
 
       // if it's time to animate results
       if (animation === MAIN_FORM_DONE) {
         this.componentVisible = true;
         this.playAnimation('fadeIn', 2000, () => {
-          this.globalAnimationState.set(RESULTS_LOADED);
+          this.globalState.set(RESULTS_LOADED);
         });
       }
 
@@ -74,13 +74,13 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
       // if user sees a loader
       if (this.isLoading) {
 
-        // if user seen loader more than 1s - hide it
-        if ((Date.now() - this.loadingStarted) > 1000) {
+        // if user has seen loader more than 500ms - hide it
+        if ((Date.now() - this.loadingStarted) > 500) {
           this.afterRefreshHook();
         } else {
 
           // user has seen loader less than 1s
-          // let's add some time show the cute loader
+          // let's add some time show the loader
           setTimeout(() => {
             this.afterRefreshHook();
           }, Math.floor(Math.random() * 500 + 500));
@@ -99,7 +99,7 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
     this.loadingStarted = 0;
 
     // notify tournaments component that we are ready
-    this.globalAnimationState.set(RESULTS_LOADED);
+    this.globalState.set(RESULTS_LOADED);
   }
 
   /**
@@ -149,24 +149,28 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
     this.isLoading = true;
     this.loadingStarted = Date.now();
 
-    // repeat initial request
-    this.dataService.sendProductsRequest(this.lastSearch);
-
     // set global state to refreshing
-    this.globalAnimationState.set(REFRESH);
+    this.globalState.set(REFRESH);
+
+    // let user see a cute animation
+    setTimeout(() => {
+
+      // repeat initial request
+      this.dataService.sendProductsRequest(this.lastSearch);
+    }, 500);
   }
 
   /**
    * On restart button click
    */
   restart(): void {
-    this.globalAnimationState.set(RESULTS_HIDING);
+    this.globalState.set(RESULTS_HIDING);
 
     // Slide to right
     this.playAnimation('slideRight', 1000, () => {
 
       // a flag for main form to slide from left
-      this.globalAnimationState.set(RESULTS_HIDDEN);
+      this.globalState.set(RESULTS_HIDDEN);
 
       // hide this component
       this.componentVisible = false;

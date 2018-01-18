@@ -3,11 +3,11 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 @Injectable()
-export class GlobalAnimationStateService {
+export class GlobalStateService {
   private subject = new Subject<any>();
 
   public set(state) {
-    console.warn('global animation set to: ', state);
+    console.warn('state is:', state);
     this.subject.next(state);
   }
 

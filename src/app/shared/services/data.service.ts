@@ -10,7 +10,7 @@ export class DataService {
     private products = new Subject<any>();
     private suggestions = new Subject<any>();
     private lastSearch = new Subject<any>();
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     /**
      * Get recent better options from backend
@@ -46,7 +46,6 @@ export class DataService {
         this.http
             .post(API_URL + 'whatElseCanIGet', formData)
             .subscribe(data => {
-                console.warn(data);
                 this.products.next(data);
             });
     }
