@@ -169,10 +169,12 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
     // generate chances and teams
     const chances = this.generateChances(this.items);
 
+    const ww = window.screen.width;
+
     // build the actual bracket
     $(this.el.nativeElement).find('.match').bracket({
       init: chances,
-      teamWidth: 220,
+      teamWidth: Math.min(ww / 4, 220),
       matchMargin: 20,
       roundMargin: 40,
       centerConnectors: true

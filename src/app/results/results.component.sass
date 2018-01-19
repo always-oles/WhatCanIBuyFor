@@ -1,3 +1,5 @@
+@import '../../assets/css/mixins'
+
 .results-container
     position: relative
     margin: 3% auto 0
@@ -10,6 +12,13 @@
     padding-bottom: 1px
     box-shadow: 2px 2px 6px 1px rgba(0,0,0,0.25)
     z-index: 200
+
+    +media(max, 1075px)
+        width: 60%
+    +media(max, 875px)
+        width: 80%
+    +media(max, sm)
+        width: 95%
 
     &.loading
         .loader-container
@@ -58,6 +67,9 @@
         font-weight: 600
         text-align: center
 
+        +media(max, sm)
+            font-size: 1.4rem
+
         .product
             color: #0071BC
             border-bottom: 1px dashed #0071BC
@@ -75,18 +87,28 @@
                 font-size: 1.7rem
                 padding: 10px 5px
                 text-align: center
+
+                +media(max, md)
+                    font-size: 1.2rem
+
             .small-header
                 font-size: 1.3rem
+
+                +media(max, md)
+                    font-size: 1rem
                        
             .name
-                width: 60%
                 text-align: left
 
-            .price
-                width: 15%
-            .remove,
-            .count
-                width: 10%
+            // manual width setting for large screens
+            // +media(min, md)
+            //     .name
+            //         width: 60%
+            //     .price
+            //         width: 15%
+            //     .remove,
+            //     .count
+            //         width: 10%
             
 
         .item
@@ -139,6 +161,21 @@
                 &:hover
                     color: #f00
 
+        // settings for both headers and rows/columns
+        +media(max, xs)
+            .remove
+                display: none !important
+        +media(max, md)
+            .item
+                font-size: 1.1rem
+            .name
+                width: 50% !important
+            .price,
+            .count
+                width: 25% !important
+            .price
+                text-align: right
+
     .buttons
         position: relative
         top: 30px
@@ -156,10 +193,16 @@
             &:active
                 transform: scale(1.05)
 
+            +media(max, sm)
+                margin: 0 15px 0 15px
+
     .share-dialog
         margin: 30px 0 0
         position: relative
         left: -15px
+
+        +media(max, sm)
+            left: 0
 
 .image-preview-container
     cursor: pointer
@@ -181,6 +224,7 @@
         cursor: pointer        
         display: inline-block
         width: auto
+        max-width: 95%
         max-height: 70vh
         border-radius: 5px
         border: 2px solid #ddd

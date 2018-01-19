@@ -1,3 +1,5 @@
+@import '../../assets/css/mixins'
+
 .tournament-container
     position: relative
     margin: 50px auto 30px
@@ -11,9 +13,23 @@
     z-index: 90
     overflow: hidden
 
+    +media(max, 1075px)
+        width: 60%
+    +media(max, 875px)
+        width: 80%
+    +media(max, sm)
+        width: 95%
+
     & > .match
         padding: 20px
+        +media(max, sm)
+            padding: 5px
 
+        .jQBracket
+            +media(max, sm)
+                font-size: 1rem
+                color: red
+ 
     &.fadeIn
         animation: tournamentFadeIn 1.5s ease-out forwards
     &.fadeOut
