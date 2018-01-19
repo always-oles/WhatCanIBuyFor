@@ -64,7 +64,7 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
         case MAIN_FORM_HIDING:
           // prevent scrollbar flickering
           this.renderer.addClass(document.body, 'animated');
-        
+
         // debuggin
         //this.componentVisible = false;
         //this.globalState.set(MAIN_FORM_DONE);
@@ -76,6 +76,11 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
 
           // reset the form
           this.mainForm.reset();
+
+          // scroll to top on mobile devices
+          if (this.dataService.isMobile()) {
+            window.scrollTo(0, 0);
+          }
 
         }, true);
 
@@ -120,15 +125,19 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
       price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
     });
 
+
+    // get radius for bursts
+    const circleRadius = this.getCircleRadius();
+
     // init dummy object for burst
     this.burst = new mojs.Burst({
       left:     0,
       top:      0,
-      radius:   { 0: 500 },
+      radius:   { 0: 450 },
       count:    20,
       children: {
         shape:        'circle',
-        radius:       17,
+        radius:       circleRadius,
         fill:         [ '#31FFFF', '#FFF531', '#FF6200', '#CB39FF'],
         strokeWidth:  5,
         duration:     1800
@@ -170,6 +179,16 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
 
     // request products from backend
     this.dataService.requestProducts(this.mainForm.value);
+  }
+
+  private getCircleRadius(): number {
+
+    // for super small screens
+    if (window.screen.width < 500) {
+      return Math.round(window.screen.width / 40);
+    } else {
+      return 17; // magical number
+    }
   }
 
   /**

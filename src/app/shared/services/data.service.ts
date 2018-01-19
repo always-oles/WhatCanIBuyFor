@@ -75,4 +75,10 @@ export class DataService {
     public getLastSearch(): Observable<any> {
         return this.lastSearch.asObservable();
     }
+
+    // this is here, because I don't need a separate service for one func
+    // thanks https://stackoverflow.com/questions/3514784/what-is-the-best-way-to-detect-a-mobile-device-in-jquery
+    public isMobile(): boolean {
+        return Boolean(('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)));
+    }
 }

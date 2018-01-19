@@ -23,6 +23,7 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
   public componentVisible: boolean = false;
   public animations: any = {
     fadeIn: false,
+    flyIn: false,
     slideDown: false,
     fall: false
   };
@@ -120,10 +121,17 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
           // make component visible
           this.componentVisible = true;
 
-          // play fade in animation
-          this.playAnimation('fadeIn', 1500, () => {
-            this.playAnimation('fall', 1000, null, true);
-          });
+          if (this.dataService.isMobile()) {
+            // fade in through opacity on mobile
+            this.playAnimation('fadeIn', 1500, () => {
+              this.playAnimation('fall', 1000, null, true);
+            });
+          } else {
+            // fly from the bottom on other devices
+            this.playAnimation('flyIn', 1500, () => {
+              this.playAnimation('fall', 1000, null, true);
+            });
+          }
         break;
 
         // When results are sliding to the right
@@ -169,12 +177,21 @@ export class TournamentComponent extends AnimatableComponent implements OnInit {
     // generate chances and teams
     const chances = this.generateChances(this.items);
 
+    // window width
     const ww = window.screen.width;
+
+    // calculate the team width
+    let teamWidthCalculated = Math.min(ww / 4, 220);
+
+    // extra small devices
+    if (ww < 350) {
+      teamWidthCalculated = Math.floor(ww / 5);
+    }
 
     // build the actual bracket
     $(this.el.nativeElement).find('.match').bracket({
       init: chances,
-      teamWidth: Math.min(ww / 4, 220),
+      teamWidth: teamWidthCalculated,
       matchMargin: 20,
       roundMargin: 40,
       centerConnectors: true

@@ -13,6 +13,7 @@ import { TooltipImageDirective } from './shared/directives/tooltip-image.directi
 import { HidePreviewOnClickDirective } from './shared/directives/hide-preview-on-click.directive';
 import { TournamentComponent } from './tournament/tournament.component';
 import { ScrollOnLoadDirective } from './shared/directives/scroll-on-load.directive';
+import { OnImageErrorDirective } from './shared/directives/on-image-error.directive';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ScrollOnLoadDirective } from './shared/directives/scroll-on-load.direct
     TooltipImageDirective,
     HidePreviewOnClickDirective,
     TournamentComponent,
-    ScrollOnLoadDirective
+    ScrollOnLoadDirective,
+    OnImageErrorDirective
   ],
   imports: [
     BrowserModule,

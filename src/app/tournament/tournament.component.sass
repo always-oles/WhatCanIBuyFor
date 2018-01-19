@@ -26,12 +26,15 @@
             padding: 5px
 
         .jQBracket
+            margin: 0 auto !important
             +media(max, sm)
                 font-size: 1rem
                 color: red
  
+    &.flyIn
+        animation: tournamentFlyIn 1.5s ease-out forwards
     &.fadeIn
-        animation: tournamentFadeIn 1.5s ease-out forwards
+        animation: fadeIn 1.5s ease-out forwards
     &.fadeOut
         animation: tournamentFadeOut 0.6s ease-out forwards
     &.slideDown
