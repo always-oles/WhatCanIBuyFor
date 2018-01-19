@@ -47,3 +47,5 @@ backend/node_modules
 backend/config.js
 
 src/app/config/
+
+gulp-config.js
