@@ -36,7 +36,7 @@
               autocomplete="off" 
               formControlName='price' 
               OnlyNumber 
-              max='1000000'
+              maxlength='7'
               [ngClass] = "{invalid: mainForm.controls['price'].dirty && !mainForm.controls['price'].valid }"
               title='Минимальное число - 50'
             />
