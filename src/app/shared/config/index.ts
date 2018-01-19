@@ -1,11 +1,11 @@
-import { isDevMode } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 let API_URL: string;
 
-if (isDevMode()) {
-    API_URL = 'http://localhost:3000/api/';
+if (environment.production) {
+    API_URL = 'https://whatcanibuyfor.in/api/';
 } else {
-    API_URL = 'http://whatcanibuyfor.in/api/';
+    API_URL = 'http://localhost:3000/api/';
 }
 
 export { API_URL };

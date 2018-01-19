@@ -109,16 +109,16 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
       }
     });
 
+    // this.mainForm = this.formBuilder.group({
+    //   product: ['Что-нибудь', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+    //   price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])]
+    // });
+
     // init the reactive form model
     this.mainForm = this.formBuilder.group({
-      product: ['Что-нибудь', Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
-      price: [ Math.floor(Math.random() * 1000 + 100), Validators.compose([ Validators.required, Validators.min(50) ])]
+      product: [null, Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
+      price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
     });
-
-    // this.mainForm = this.formBuilder.group({
-    //   product: [null, Validators.compose([ Validators.required, Validators.minLength(1), Validators.maxLength(70) ])],
-    //   price: [null, Validators.compose([ Validators.required, Validators.min(50) ])],
-    // });
 
     // init dummy object for burst
     this.burst = new mojs.Burst({
