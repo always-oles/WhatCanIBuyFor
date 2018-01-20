@@ -19,9 +19,9 @@
         width: 90%
 
     &.slideFromLeft
-        animation: slideFromLeft 1s forwards ease-out
+        animation: slideFromLeft 1s ease-out forwards
     &.formShrinks 
-        animation: formAnimation 1s forwards ease-out, fade-out 0.5s 1s forwards
+        animation: formAnimation 1s ease forwards
 
     .yellow-border
         height: 8px
@@ -139,12 +139,12 @@
 
 .mystery-bag
     position: absolute
-    top: 3vh
-    left: 28%
     z-index: 999
+    top: 3%
+    left: 28%
     width: 40%
     min-width: 200px
-    display: none
+    max-height: 90%
 
     +media(max, xs)
         width: 90%
@@ -154,9 +154,10 @@
         width: 65%
         left: 14%
 
+    &.bagFadeInMobile
+        animation: bagFadeInMobile 2s ease-out forwards
     &.bagFadeIn
-        display: block
-        animation: bagFadeIn 2s forwards
+        animation: bagFadeIn 2s ease-out forwards
     &.bagShaking
         animation: bagShaking 1.7s forwards
     &.bagFadeOut

@@ -77,6 +77,8 @@
 
     .items-list
         margin: 30px 0 0
+        +media(max, xs)
+            margin: 10px 0 0
 
         .headers
             display: flex
@@ -98,18 +100,7 @@
                     font-size: 1rem
                        
             .name
-                text-align: left
-
-            // manual width setting for large screens
-            // +media(min, md)
-            //     .name
-            //         width: 60%
-            //     .price
-            //         width: 15%
-            //     .remove,
-            //     .count
-            //         width: 10%
-            
+                text-align: left            
 
         .item
             display: flex
@@ -142,6 +133,8 @@
             .name
                 width: 60%
                 text-align: left
+                text-overflow: ellipsis
+                overflow: hidden
 
                 .photo
                     cursor: pointer                

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { GlobalStateService } from '../shared/services/global-state.service';
 import { DataService } from '../shared/services/data.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -19,15 +19,18 @@ import * as superplaceholder from 'superplaceholder/dist/superplaceholder.min';
   templateUrl: './main-form.component.html',
   styleUrls: ['./main-form.component.sass']
 })
-export class MainFormComponent extends AnimatableComponent implements OnInit {
+export class MainFormComponent extends AnimatableComponent implements OnInit, AfterViewInit {
   public mainForm: FormGroup;
   public componentVisible: boolean = true;
+  public bagVisible: boolean = false;
 
+  // all available component animations
   public animations: any = {
     formShrinks: false,
     bagShaking: false,
     bagFadeOut: false,
     bagFadeIn: false,
+    bagFadeInMobile: false,
     fadeFromLeft: false
   };
 
@@ -42,12 +45,20 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
   public burstsDone: number = 0;
   public burstsNeeded: number = 3;
 
+  // default bag fade in animation
+  public bagFadeAnimation: string = 'bagFadeIn';
+
   constructor(private renderer: Renderer2,
               private globalState: GlobalStateService,
               private dataService: DataService,
               private formBuilder: FormBuilder
   ) {
     super();
+
+    // fade in differently on mobile
+    if (this.dataService.isMobile()) {
+      this.bagFadeAnimation = 'bagFadeInMobile';
+    }
 
     // upon global animation state change
     this.globalState.get().subscribe(animation => {
@@ -71,21 +82,23 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
         //this.renderer.removeClass(document.body, 'animated');
         /////////////////
 
+        // show the bag
+        this.bagVisible = true;
+
+        // scroll to top on mobile
+        this.resetScrollOnMobile();
+
         // play formShrinks animation, then hide the form
         this.playAnimation('formShrinks', 1200, () => {
 
           // reset the form
           this.mainForm.reset();
-
-          // scroll to top on mobile devices
-          if (this.dataService.isMobile()) {
-            window.scrollTo(0, 0);
-          }
-
         }, true);
 
         // play bag animations chained
-        this.playAnimation('bagFadeIn', 2000, () => {
+        this.playAnimation(this.bagFadeAnimation, 2000, () => {
+          console.log(this.bagFadeAnimation);
+
           // hide the form
           this.componentVisible = false;
 
@@ -106,6 +119,7 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
             // then fade out
             this.playAnimation('bagFadeOut', 1300, () => {
               this.resetAnimations();
+              this.bagVisible = false;
             });
           }, true);
         }, true);
@@ -145,6 +159,10 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.resetScrollOnMobile();
+  }
+
   ngOnInit() {
     // get suggestions for product input
     this.dataService.getSuggestions()
@@ -174,15 +192,26 @@ export class MainFormComponent extends AnimatableComponent implements OnInit {
   onSubmitClick(e) {
     e.preventDefault();
 
-    // set global animation state
+    // set global state
     this.globalState.set(MAIN_FORM_HIDING);
 
     // request products from backend
     this.dataService.requestProducts(this.mainForm.value);
   }
 
-  private getCircleRadius(): number {
+  /**
+   * In few cases we have to scroll to top on mobile devices
+   */
+  private resetScrollOnMobile() {
+    if (this.dataService.isMobile()) {
+      window.scrollTo(0, 0);
+    }
+  }
 
+  /**
+   * Get circle radius for particles during explosions
+   */
+  private getCircleRadius(): number {
     // for super small screens
     if (window.screen.width < 500) {
       return Math.round(window.screen.width / 40);

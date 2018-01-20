@@ -55,6 +55,14 @@
 
 <!-- mystery baggerino -->
 <img class='mystery-bag' 
-     [ngClass]='{bagShaking: animations.bagShaking, bagFadeIn: animations.bagFadeIn, bagAnimated: animations.bagAnimated, bagFadeOut: animations.bagFadeOut}' 
-     #bag src='assets/bag.svg' 
+     [ngClass]='{
+       hidden: !bagVisible,
+       bagShaking: animations.bagShaking, 
+       bagFadeIn: animations.bagFadeIn, 
+       bagFadeInMobile: animations.bagFadeInMobile, 
+       bagAnimated: animations.bagAnimated, 
+       bagFadeOut: animations.bagFadeOut
+      }' 
+     #bag 
+     src='assets/bag.svg' 
      alt='Mystery bag'/>

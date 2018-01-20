@@ -1,11 +1,9 @@
 // Results component appearance
 @keyframes resultsFadeIn
     0%
-        transform: scale(0.1) rotate(-90deg)
-    60%
-        transform: scale(0.5) rotate(-90deg)
+        transform: scale(0.05)
     100%
-        transform: scale(1) rotate(0)
+        transform: scale(1)
 
 // Results component hiding
 @keyframes slideRight
@@ -68,27 +66,33 @@
         opacity: 0
 
 // Bag animations
+@keyframes bagFadeInMobile
+    0%
+        top: 150vh
+    100%
+        top: 3vh
+
 @keyframes bagFadeIn
     0%
         transform: translateY(150vh)
     100%
-        transform: translateY(0)
+        transform: translateY(3vh)
 
 @keyframes bagShaking
     0%
-        transform: translateY(0)
+        transform: translateY(3vh)
     10%
         transform: rotate(-4deg) translateY(15vh)
     30%
-        transform: translateY(0)
+        transform: translateY(3vh)
     40%
         transform: rotate(3deg) translateY(15vh)
     60%
-        transform: translateY(0)
+        transform: translateY(3vh)
     70%
         transform: rotate(-4deg) translateY(15vh)
     90%
-        transform: translateY(0)
+        transform: translateY(3vh)
 
 @keyframes bagFadeOut
     to
