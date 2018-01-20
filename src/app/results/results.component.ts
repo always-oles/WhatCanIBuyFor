@@ -57,7 +57,7 @@ export class ResultsComponent extends AnimatableComponent implements OnInit {
       // if it's time to animate results
       if (animation === MAIN_FORM_DONE) {
         this.componentVisible = true;
-        this.playAnimation('fadeIn', 2000, () => {
+        this.playAnimation('fadeIn', 1500, () => {
           this.globalState.set(RESULTS_LOADED);
         });
       }
